@@ -1,8 +1,219 @@
+import { useEffect, useState } from "react";
+import { TbLayoutNavbarExpandFilled } from "react-icons/tb";
+import { MdOutlineCoronavirus } from "react-icons/md";
+import { IoMenu } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import {
+  Navbar,
+  Collapse,
+  Typography,
+  IconButton,
+  Button,
+  Input,
+} from "@material-tailwind/react";
+
+const NavList = () => (
+  <ul className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-6">
+    {[
+      { label: "Home", to: "/" },
+      { label: "Movies", to: "/movies" },
+      { label: "Series", to: "/series" },
+      { label: "Contact Us", to: "/contact-us" },
+    ].map(({ label, to }) => (
+      <Typography
+        as={Link}
+        to={to}
+        key={label}
+        variant="small"
+        className="p-1 font-medium text-white hover:text-light-blue-900 transition"
+      >
+        {label}
+      </Typography>
+    ))}
+  </ul>
+);
+
 const Header = () => {
+  // في تعديل هناااا
+  const [openNav, setOpenNav] = useState(false);
+  const [searchType, setSearchType] = useState("Movies");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
+
+  // في تعديل هناااا
+  const mockData = [
+    "Avengers",
+    "Batman",
+    "Superman",
+    "Iron Man",
+    "Spider Man",
+    "Guardians of the Galaxy",
+    "Black Panther",
+  ];
+
+  const handleWindowResize = () =>
+    window.innerWidth >= 960 && setOpenNav(false);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
+  }, []);
+
+  const toggleSearchType = () => {
+    setSearchType((prev) => (prev === "Movies" ? "Series" : "Movies"));
+  };
+
+  const handleSearch = () => {
+    console.log(`Searching ${searchType} for:`, searchQuery);
+  };
+
+  const handleInputChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query) {
+      const filteredSuggestions = mockData.filter((item) =>
+        item.toLowerCase().includes(query.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+      setSuggestionsVisible(true);
+    } else {
+      setSuggestionsVisible(false);
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchQuery(suggestion);
+    setSuggestionsVisible(false);
+  };
+
   return (
-    <div>
-      <h1>Header</h1>
-    </div>
+    <>
+      <Navbar className="bg-blue-gray-900 text-white px-6 py-3 shadow-md rounded-none">
+        <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
+          <div className="flex items-center gap-8">
+            <Typography
+              as={Link}
+              to="/"
+              variant="h6"
+              className="cursor-pointer text-white"
+            >
+              Movies App
+            </Typography>
+            <div className="hidden lg:flex">
+              <NavList />
+            </div>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-2">
+            <Input
+              placeholder={`Search ${searchType}`}
+              value={searchQuery}
+              onChange={handleInputChange}
+              className="text-black bg-white placeholder-black"
+              containerProps={{ className: "min-w-[200px]" }}
+            />
+
+            <Button
+              onClick={handleSearch}
+              color="red"
+              variant="outlined"
+              size="sm"
+              className="border-2 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[80px]"
+            >
+              Search
+            </Button>
+            <Button
+              onClick={toggleSearchType}
+              size="sm"
+              color="green"
+              variant="outlined"
+              className="border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[120px]"
+            >
+              {searchType === "Movies" ? "Search Series" : "Search Movies"}
+            </Button>
+
+            <Button
+              size="sm"
+              color="blue"
+              variant="outlined"
+              className="border-2 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[80px]"
+            >
+              Login
+            </Button>
+          </div>
+
+          <IconButton
+            variant="text"
+            className="lg:hidden text-white"
+            onClick={() => setOpenNav(!openNav)}
+          >
+            <IoMenu className="h-6 w-6 text-white !important" />
+          </IconButton>
+        </div>
+      </Navbar>
+
+      <Collapse open={openNav} className="lg:hidden">
+        <div className="pt-4">
+          <NavList />
+          <div className="flex flex-col gap-2 mt-4 justify-center items-center w-full">
+            <div className="w-full max-w-[300px] relative">
+              <Input
+                placeholder={`Search ${searchType}`}
+                value={searchQuery}
+                onChange={handleInputChange}
+                className="text-black bg-white placeholder-black"
+              />
+              {isSuggestionsVisible && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 mt-2 w-full max-w-[300px] z-10">
+                  <div className="max-h-40 overflow-auto border-2 border-gray-300 rounded-md w-full bg-blue-gray-900 text-white">
+                    <ul>
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          className="p-2 cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
+            <Button
+              onClick={toggleSearchType}
+              size="sm"
+              color="green"
+              variant="outlined"
+              className="border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[120px] lg:min-w-[160px] mx-auto"
+            >
+              {searchType === "Movies" ? "Search Series" : "Search Movies"}
+            </Button>
+            <Button
+              onClick={handleSearch}
+              size="sm"
+              color="red"
+              variant="outlined"
+              className="border-2 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[80px] lg:min-w-[120px] mx-auto"
+            >
+              Search
+            </Button>
+            <Button
+              size="sm"
+              color="blue"
+              variant="outlined"
+              className="border-2 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[80px] lg:min-w-[120px] mx-auto"
+            >
+              Login
+            </Button>
+          </div>
+        </div>
+      </Collapse>
+    </>
   );
 };
 

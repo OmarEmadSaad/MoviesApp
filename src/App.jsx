@@ -1,10 +1,11 @@
 import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Footer from "./Footer";
+import Home from "./components/Home/pages/index";
 const App = () => {
   return (
-    <div>
-      <h1 className="text-red-600">App</h1>
+    <div className="bg-black">
       <Header />
+      <Home />
       <Footer />
     </div>
   );
