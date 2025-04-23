@@ -90,9 +90,12 @@ const Header = () => {
   };
 
   return (
-    <>
-      <Navbar className="bg-blue-gray-900 text-white px-6 py-3 shadow-md rounded-none">
-        <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
+    <div>
+      <Navbar
+        fullWidth
+        className="w-full bg-blue-gray-900 text-white py-3 shadow-md rounded-none"
+      >
+        <div className="flex items-center justify-between w-full px-6">
           <div className="flex items-center gap-8">
             <Typography
               as={Link}
@@ -213,7 +216,7 @@ const Header = () => {
           </div>
         </div>
       </Collapse>
-    </>
+    </div>
   );
 };
 
