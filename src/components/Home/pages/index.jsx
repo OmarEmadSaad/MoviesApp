@@ -90,6 +90,7 @@ const Home = () => {
                 size="sm"
                 color="white"
                 className="capitalize hover:bg-white hover:text-black">
+
                 {label}
               </Button>
             ))}

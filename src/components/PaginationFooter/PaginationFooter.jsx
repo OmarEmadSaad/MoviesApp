@@ -6,7 +6,6 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
-
 const PaginationFooter = ({
   next,
   prev,
@@ -30,7 +29,6 @@ const PaginationFooter = ({
             className="h-4 w-4 sm:h-6 sm:w-6"
           />
         </IconButton>
-
         <IconButton
           size="sm"
           variant="outlined"
@@ -41,6 +39,7 @@ const PaginationFooter = ({
         </IconButton>
 
         <Typography color="gray" className="font-normal text-white">
+
           Page <strong className="text-white">{page}</strong> of{" "}
           <strong className="text-white">{totalPages}</strong>
         </Typography>
@@ -53,7 +52,6 @@ const PaginationFooter = ({
           className="text-white">
           <ArrowRightIcon strokeWidth={2} className="h-4 w-4 sm:h-6 sm:w-6" />
         </IconButton>
-
         <IconButton
           size="sm"
           variant="outlined"

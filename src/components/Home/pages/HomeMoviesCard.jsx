@@ -33,11 +33,13 @@ const HomeMoviesCard = () => {
         {filteredMovies.map((movie) => (
           <Card
             key={movie.id}
-            className="w-96 max-w-[20rem] shadow-lg bg-gray-900 flex flex-col justify-between">
+            className="w-96 max-w-[20rem] shadow-lg bg-gray-900 flex flex-col justify-between"
+          >
             <CardHeader
               floated={false}
               color="blue-gray"
-              className="relative h-56">
+              className="relative h-56"
+            >
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
@@ -74,7 +76,8 @@ const HomeMoviesCard = () => {
                 size="sm"
                 color="blue"
                 variant="outlined"
-                className="hover:bg-blue-600 hover:text-black">
+                className="hover:bg-blue-600 hover:text-black"
+              >
                 Details
               </Button>
             </CardFooter>

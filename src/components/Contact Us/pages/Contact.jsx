@@ -1,3 +1,4 @@
+
 import emailjs from "@emailjs/browser";
 import { useRef } from "react";
 import { toast } from "react-toastify";
@@ -41,7 +42,8 @@ const Contact = () => {
       <form
         ref={form}
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 font-semibold bg-black rounded-[1em] w-80 text-white">
+        className="flex flex-col gap-4 font-semibold bg-black rounded-[1em] w-80 text-white"
+      >
         <CardBody className="flex flex-col gap-4">
           <Input
             name="user_email"
@@ -71,7 +73,8 @@ const Contact = () => {
             variant="outlined"
             color="blue"
             fullWidth
-            className="border-2 transition whitespace-nowrap px-2 py-2 min-w-[80px]">
+            className="border-2 transition whitespace-nowrap px-2 py-2 min-w-[80px]"
+          >
             Send Message
           </Button>
         </CardFooter>
