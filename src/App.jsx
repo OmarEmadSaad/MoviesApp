@@ -1,10 +1,20 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./Header";
+import Footer from "./Footer";
+import Home from "./components/Home/pages/index";
+import { Route, Routes } from "react-router-dom";
+import Contact from "./components/Contact Us/pages/Contact";
+import Movies from "./components/Movies/pages/Movies";
+import Series from "./components/Series/pages/Series";
 const App = () => {
   return (
-    <div>
-      <h1 className="text-red-600">App</h1>
+    <div className="bg-black">
       <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact-us" element={<Contact />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/series" element={<Series />} />
+      </Routes>
       <Footer />
     </div>
   );
