@@ -1,4 +1,5 @@
-import emailjs from "emailjs-com";
+
+import emailjs from "@emailjs/browser";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import {
