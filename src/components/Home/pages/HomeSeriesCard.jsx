@@ -7,17 +7,18 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { Rating } from "react-simple-star-rating";
+import RatingWithStars from "../../Movies/components/RatingWithStars";
+import Loading from "../../apiRequestError-Loading/Loading";
 
 const HomeSeriesCard = () => {
   const tvShows = useSelector((state) => state.series.tvShows);
-  const loading = useSelector((state) => state.series.status) === "loading";
+  const loading = useSelector((state) => state.series.status);
 
-  if (loading) {
-    return <p>Loading...</p>;
+  if (loading == "loading") {
+    return <Loading />;
   }
 
-  const filteredSeries = tvShows.filter((show) => show.vote_average > 7.5);
+  const filteredSeries = tvShows.filter((show) => show.vote_average > 7);
 
   if (!filteredSeries.length) {
     return <p>No TV shows with rating above 7 found.</p>;
@@ -33,7 +34,7 @@ const HomeSeriesCard = () => {
         {filteredSeries.map((show) => (
           <Card
             key={show.id}
-            className="w-96 max-w-[20rem] shadow-lg bg-gray-900 flex flex-col justify-between"
+            className="w-72 md:w-80 lg:w-80 shadow-lg bg-gray-900 flex flex-col justify-between"
           >
             <CardHeader
               floated={false}
@@ -58,14 +59,7 @@ const HomeSeriesCard = () => {
                 </Typography>
 
                 <div className="w-[120px] flex justify-end">
-                  <Rating
-                    readonly
-                    initialValue={show.vote_average / 2}
-                    size={20}
-                    SVGstyle={{ display: "inline" }}
-                    fillColor="#ffd700"
-                    emptyColor="#d1d5db"
-                  />
+                  <RatingWithStars rate={show.vote_average} />{" "}
                 </div>
               </div>
               <Typography variant="paragraph" className="text-white text-sm">

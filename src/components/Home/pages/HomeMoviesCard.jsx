@@ -7,14 +7,15 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { Rating } from "react-simple-star-rating";
+import RatingWithStars from "../../Movies/components/RatingWithStars";
+import Loading from "../../apiRequestError-Loading/Loading";
 
 const HomeMoviesCard = () => {
   const movies = useSelector((state) => state.movies.movies);
   const loading = useSelector((state) => state.movies.loading);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const filteredMovies = movies.filter((movie) => movie.vote_average > 7);
@@ -33,7 +34,7 @@ const HomeMoviesCard = () => {
         {filteredMovies.map((movie) => (
           <Card
             key={movie.id}
-            className="w-96 max-w-[20rem] shadow-lg bg-gray-900 flex flex-col justify-between"
+            className="w-72 md:w-80 lg:w-80 shadow-lg bg-gray-900 flex flex-col justify-between"
           >
             <CardHeader
               floated={false}
@@ -52,19 +53,13 @@ const HomeMoviesCard = () => {
                 <Typography
                   variant="h5"
                   color="blue-gray"
-                  className="font-medium text-white truncate max-w-[150px] text-lg">
+                  className="font-medium text-white truncate max-w-[150px] text-lg"
+                >
                   {movie.title}
                 </Typography>
 
                 <div className="w-[120px] flex justify-end">
-                  <Rating
-                    readonly
-                    initialValue={movie.vote_average / 2}
-                    size={20}
-                    SVGstyle={{ display: "inline" }}
-                    fillColor="#ffd700"
-                    emptyColor="#d1d5db"
-                  />
+                  <RatingWithStars rate={movie.vote_average} />{" "}
                 </div>
               </div>
               <Typography variant="paragraph" className="text-white text-sm">
@@ -73,10 +68,10 @@ const HomeMoviesCard = () => {
             </CardBody>
             <CardFooter className="pt-3 flex justify-center mt-auto">
               <Button
+                className="hover:bg-light-blue-400 hover:text-black"
                 size="sm"
                 color="blue"
                 variant="outlined"
-                className="hover:bg-blue-600 hover:text-black"
               >
                 Details
               </Button>

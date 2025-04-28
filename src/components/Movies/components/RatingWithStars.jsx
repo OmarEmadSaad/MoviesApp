@@ -6,34 +6,30 @@ export default function RatingWithStars({ rate }) {
   return (
     <div className="relative w-max">
       <div className="flex">
-        <FaRegStar className="text-[1.8em]" color="blue" />
-        <FaRegStar className="text-[1.8em]" color="blue" />
-        <FaRegStar className="text-[1.8em]" color="blue" />
-        <FaRegStar className="text-[1.8em]" color="blue" />
-        <FaRegStar className="text-[1.8em]" color="blue" />
+        <FaRegStar className="text-[1.2em] w-[1em]" color="blue" />{" "}
+        <FaRegStar className="text-[1.2em] w-[1em]" color="blue" />
+        <FaRegStar className="text-[1.2em] w-[1em]" color="blue" />
+        <FaRegStar className="text-[1.2em] w-[1em]" color="blue" />
+        <FaRegStar className="text-[1.2em] w-[1em]" color="blue" />
       </div>
       <div
         style={{ width: `${precentage}%` }}
-        className="flex  absolute top-0 left-0 overflow-hidden">
+        className="flex absolute top-0 left-0 overflow-hidden"
+      >
         <div>
-          {" "}
-          <FaStar className=" w-[1em] text-[1.8em]" color="yellow" />
+          <FaStar className="w-[1em] text-[1.2em]" color="yellow" />{" "}
         </div>
         <div>
-          {" "}
-          <FaStar className=" w-[1em] text-[1.8em]" color="yellow" />
+          <FaStar className="w-[1em] text-[1.2em]" color="yellow" />
         </div>
         <div>
-          {" "}
-          <FaStar className=" w-[1em] text-[1.8em]" color="yellow" />
+          <FaStar className="w-[1em] text-[1.2em]" color="yellow" />
         </div>
         <div>
-          {" "}
-          <FaStar className=" w-[1em] text-[1.8em]" color="yellow" />
+          <FaStar className="w-[1em] text-[1.2em]" color="yellow" />
         </div>
         <div>
-          {" "}
-          <FaStar className=" w-[1em] text-[1.8em]" color="yellow" />
+          <FaStar className="w-[1em] text-[1.2em]" color="yellow" />
         </div>
       </div>
     </div>
