@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Requesterror = () => {
@@ -17,12 +16,14 @@ const Requesterror = () => {
       <div className="flex gap-3">
         <button
           onClick={() => navigate("/")}
-          className="px-6 py-3 bg-red-700 hover:bg-red-500 transition rounded-lg text-white font-bold">
+          className="px-6 py-3 bg-red-700 hover:bg-red-500 transition rounded-lg text-white font-bold"
+        >
           Go Home
         </button>
         <button
           onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-red-600 hover:bg-red-700 transition rounded-lg text-white font-semibold">
+          className="px-6 py-3 bg-red-600 hover:bg-red-700 transition rounded-lg text-white font-semibold"
+        >
           Reload Page
         </button>
       </div>

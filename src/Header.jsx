@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TbLayoutNavbarExpandFilled } from "react-icons/tb";
 import { MdOutlineCoronavirus } from "react-icons/md";
 import { IoMenu } from "react-icons/io5";
@@ -34,14 +34,14 @@ const NavList = () => (
 );
 
 const Header = () => {
-  // في تعديل هناااا
   const [openNav, setOpenNav] = useState(false);
   const [searchType, setSearchType] = useState("Movies");
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
 
-  // في تعديل هناااا
+  const searchRef = useRef(null);
+
   const mockData = [
     "Avengers",
     "Batman",
@@ -52,12 +52,20 @@ const Header = () => {
     "Black Panther",
   ];
 
-  const handleWindowResize = () =>
-    window.innerWidth >= 960 && setOpenNav(false);
+  const handleWindowResize = () => {
+    if (window.innerWidth >= 960) {
+      setOpenNav(false);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const toggleSearchType = () => {
@@ -66,6 +74,7 @@ const Header = () => {
 
   const handleSearch = () => {
     console.log(`Searching ${searchType} for:`, searchQuery);
+    setSuggestionsVisible(false);
   };
 
   const handleInputChange = (e) => {
@@ -79,14 +88,20 @@ const Header = () => {
       setSuggestions(filteredSuggestions);
       setSuggestionsVisible(true);
     } else {
-      setSuggestionsVisible(false);
       setSuggestions([]);
+      setSuggestionsVisible(false);
     }
   };
 
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion);
     setSuggestionsVisible(false);
+  };
+
+  const handleClickOutside = (e) => {
+    if (searchRef.current && !searchRef.current.contains(e.target)) {
+      setSuggestionsVisible(false);
+    }
   };
 
   return (
@@ -110,21 +125,40 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-2">
-            <Input
-              placeholder={`Search ${searchType}`}
-              value={searchQuery}
-              onChange={handleInputChange}
-              className="text-black bg-white placeholder-black"
-              containerProps={{ className: "min-w-[200px]" }}
-            />
+          <div className="hidden lg:flex items-center gap-2" ref={searchRef}>
+            <div className="relative min-w-[200px]">
+              <Input
+                placeholder={`Search ${searchType}`}
+                value={searchQuery}
+                onChange={handleInputChange}
+                className="text-black bg-white placeholder-black"
+                containerProps={{ className: "min-w-[200px]" }}
+              />
+              {isSuggestionsVisible && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 mt-2 w-full max-w-[300px] z-10">
+                  <div className="max-h-40 overflow-auto border-2 border-gray-300 rounded-md w-full bg-blue-gray-900 text-white">
+                    <ul>
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          className="p-2 cursor-pointer hover:bg-gray-100 hover:text-black"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
 
             <Button
               onClick={handleSearch}
               color="red"
               variant="outlined"
               size="sm"
-              className="border-2 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[80px]"
+              className="border-2 hover:text-white hover:bg-red-900 transition whitespace-nowrap px-2 py-2 min-w-[80px]"
             >
               Search
             </Button>
@@ -133,11 +167,10 @@ const Header = () => {
               size="sm"
               color="green"
               variant="outlined"
-              className="border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[120px]"
+              className="border-2 border-green-500 text-green-500 hover:bg-green-900 hover:text-white transition whitespace-nowrap px-2 py-2 min-w-[120px]"
             >
               {searchType === "Movies" ? "Search Series" : "Search Movies"}
             </Button>
-
             <Button
               size="sm"
               color="blue"
@@ -153,7 +186,7 @@ const Header = () => {
             className="lg:hidden text-white"
             onClick={() => setOpenNav(!openNav)}
           >
-            <IoMenu className="h-6 w-6 text-white !important" />
+            <IoMenu className="h-6 w-6 text-white" />
           </IconButton>
         </div>
       </Navbar>
@@ -161,8 +194,11 @@ const Header = () => {
       <Collapse open={openNav} className="lg:hidden">
         <div className="pt-4">
           <NavList />
-          <div className="flex flex-col gap-2 mt-4 justify-center items-center w-full">
-            <div className="w-full max-w-[300px] relative">
+          <div
+            className="flex flex-col gap-2 mt-4 justify-center items-center w-full"
+            ref={searchRef}
+          >
+            <div className="relative w-full max-w-[300px]">
               <Input
                 placeholder={`Search ${searchType}`}
                 value={searchQuery}
@@ -176,7 +212,7 @@ const Header = () => {
                       {suggestions.map((suggestion, index) => (
                         <li
                           key={index}
-                          className="p-2 cursor-pointer hover:bg-gray-100"
+                          className="p-2 cursor-pointer hover:bg-gray-100 hover:text-black"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           {suggestion}
@@ -187,6 +223,7 @@ const Header = () => {
                 </div>
               )}
             </div>
+
             <Button
               onClick={toggleSearchType}
               size="sm"
