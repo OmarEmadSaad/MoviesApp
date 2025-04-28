@@ -52,8 +52,7 @@ const HomeMoviesCard = () => {
                 <Typography
                   variant="h5"
                   color="blue-gray"
-                  className="font-medium text-white truncate max-w-[150px] text-lg"
-                >
+                  className="font-medium text-white truncate max-w-[150px] text-lg">
                   {movie.title}
                 </Typography>
 

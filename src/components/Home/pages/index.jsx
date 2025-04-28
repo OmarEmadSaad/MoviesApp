@@ -1,8 +1,8 @@
 import { Button } from "@material-tailwind/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMovies } from "../../Redux/moviesSlice";
-import { fetchTvShows } from "../../Redux/seriesSlice";
+import { fetchMovies } from "../../Redux/slices/moviesSlice";
+import { fetchTvShows } from "../../Redux/slices/seriesSlice";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -49,8 +49,7 @@ const Home = () => {
       className={`text-center text-2xl font-semibold ${color}`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+      transition={{ duration: 0.6 }}>
       {text}
     </motion.p>
   );
@@ -74,8 +73,7 @@ const Home = () => {
                 variant="outlined"
                 size="sm"
                 color="white"
-                className="capitalize hover:bg-white hover:text-black"
-              >
+                className="capitalize hover:bg-white hover:text-black">
                 {label}
               </Button>
             ))}
@@ -91,8 +89,8 @@ const Home = () => {
                 variant="outlined"
                 size="sm"
                 color="white"
-                className="capitalize hover:bg-white hover:text-black"
-              >
+                className="capitalize hover:bg-white hover:text-black">
+
                 {label}
               </Button>
             ))}
