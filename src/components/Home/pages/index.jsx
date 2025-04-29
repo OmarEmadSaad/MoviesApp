@@ -1,14 +1,16 @@
 import { Button } from "@material-tailwind/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMovies } from "../../Redux/slices/moviesSlice";
-import { fetchTvShows } from "../../Redux/slices/seriesSlice";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { motion } from "framer-motion";
 import HomeMoviesCard from "./HomeMoviesCard";
 import HomeSeriesCard from "./HomeSeriesCard";
+import Loading from "../../apiRequestError-Loading/Loading";
+import Requesterror from "../../apiRequestError-Loading/Requesterror";
+import { fetchMovies } from "../../Redux/MoviesSlice/moviesSlice";
+import { fetchTvShows } from "../../Redux/SeriesSlice/seriesSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -44,16 +46,6 @@ const Home = () => {
     ],
   };
 
-  const AnimatedMessage = ({ text, color = "text-white" }) => (
-    <motion.p
-      className={`text-center text-2xl font-semibold ${color}`}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}>
-      {text}
-    </motion.p>
-  );
-
   const sortByButtons = ["Title", "Popularity", "Date", "Rating"];
   const sortOrderButtons = ["Descending", "Ascending"];
 
@@ -73,7 +65,8 @@ const Home = () => {
                 variant="outlined"
                 size="sm"
                 color="white"
-                className="capitalize hover:bg-white hover:text-black">
+                className="capitalize hover:bg-white hover:text-black"
+              >
                 {label}
               </Button>
             ))}
@@ -89,8 +82,8 @@ const Home = () => {
                 variant="outlined"
                 size="sm"
                 color="white"
-                className="capitalize hover:bg-white hover:text-black">
-
+                className="capitalize hover:bg-white hover:text-black"
+              >
                 {label}
               </Button>
             ))}
@@ -100,10 +93,10 @@ const Home = () => {
 
       <div className="w-full max-w-full mt-12 px-4">
         <h1 className="text-light-blue-800 text-4xl mb-2">Movies</h1>
-        {movieStatus === "loading" ? (
-          <AnimatedMessage text="Loading Movies 😇..." />
-        ) : movieStatus === "failed" ? (
-          <AnimatedMessage text={`Error: ${movieError}`} color="text-red-500" />
+        {movieStatus == "loading" ? (
+          <Loading />
+        ) : movieStatus == "failed" ? (
+          <Requesterror />
         ) : (
           <Slider {...settings}>
             {movies.map((movie) => (
@@ -123,10 +116,10 @@ const Home = () => {
 
       <div className="w-full max-w-full mt-12 px-4">
         <h1 className="text-light-blue-800 text-4xl mb-2">Series</h1>
-        {tvStatus === "loading" ? (
-          <AnimatedMessage text="Loading Series 😇..." />
-        ) : tvStatus === "failed" ? (
-          <AnimatedMessage text={`Error: ${tvError}`} color="text-red-500" />
+        {tvStatus == "loading" ? (
+          <Loading />
+        ) : tvStatus == "failed" ? (
+          <Requesterror />
         ) : (
           <Slider {...settings}>
             {tvShows.map((tvShow) => (
