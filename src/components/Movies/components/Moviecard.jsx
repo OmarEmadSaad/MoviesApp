@@ -7,8 +7,15 @@ import {
   Button,
 } from "@material-tailwind/react";
 import MovieRating from "./RatingWithStars";
+import { Link } from "react-router-dom";
 
-export function Moviecard({ poster_path, title, vote_count, vote_average }) {
+export function Moviecard({
+  id,
+  poster_path,
+  title,
+  vote_count,
+  vote_average,
+}) {
   return (
     <div className="flex items-center justify-center mb-7">
       <Card className="w-72 md:w-80 lg:w-80 shadow-lg bg-gray-900">
@@ -42,14 +49,16 @@ export function Moviecard({ poster_path, title, vote_count, vote_average }) {
           </div>
         </CardBody>
         <CardFooter className="pt-3 flex justify-center">
-          <Button
-            className="hover:bg-light-blue-500 hover:text-black mt-2"
-            size="sm"
-            color="blue"
-            variant="outlined"
-          >
-            details
-          </Button>
+          <Link to={`/movie/${id}`}>
+            <Button
+              className="hover:bg-light-blue-500 hover:text-black mt-2"
+              size="sm"
+              color="blue"
+              variant="outlined"
+            >
+              details
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>

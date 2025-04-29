@@ -61,6 +61,7 @@ const Movies = () => {
               vote_count={movie.vote_count}
               vote_average={movie.vote_average}
               backdrop_path={movie.backdrop_path}
+              id={movie.id}
             />
           );
         })}
