@@ -5,7 +5,7 @@ import { onepagmoviesapi } from "./MoviesSlice/moviesPagesSlice";
 import { footerPaginationmovies } from "./MoviesSlice/footerPaginationmoviesSlice";
 import { footerPaginationseries } from "./SeriesSlice/footerPaginationSeriesSlice";
 import { onepageseriesapi } from "./SeriesSlice/seriesPagesSlice";
-
+import { onemoviedetails } from "./DetailsMoviesSlice/movieDetailsSlice";
 export const store = configureStore({
   reducer: {
     movies: moviesReducer,
@@ -14,5 +14,6 @@ export const store = configureStore({
     footerPaginationmovies,
     footerPaginationseries,
     onepageseriesapi,
+    onemoviedetails,
   },
 });
