@@ -9,8 +9,10 @@ import {
 } from "@material-tailwind/react";
 import RatingWithStars from "../../Movies/components/RatingWithStars";
 import Loading from "../../apiRequestError-Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const HomeSeriesCard = () => {
+  const navigate = useNavigate();
   const tvShows = useSelector((state) => state.series.tvShows);
   const loading = useSelector((state) => state.series.status);
 
@@ -44,7 +46,7 @@ const HomeSeriesCard = () => {
               <img
                 src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
                 alt={show.name}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover hover:cursor-pointer"
               />
               <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60" />
             </CardHeader>
@@ -72,6 +74,7 @@ const HomeSeriesCard = () => {
                 color="blue"
                 variant="outlined"
                 className="hover:bg-blue-600 hover:text-black"
+                onClick={() => navigate(`/series/${show.id}`)}
               >
                 Details
               </Button>

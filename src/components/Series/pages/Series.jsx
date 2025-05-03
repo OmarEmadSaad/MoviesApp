@@ -57,6 +57,7 @@ const Series = () => {
               name={item.name}
               poster_path={item.poster_path}
               overview={item.overview}
+              id={item.id}
             />
           );
         })}

@@ -9,8 +9,10 @@ import {
 } from "@material-tailwind/react";
 import RatingWithStars from "../../Movies/components/RatingWithStars";
 import Loading from "../../apiRequestError-Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const HomeMoviesCard = () => {
+  const navigate = useNavigate();
   const movies = useSelector((state) => state.movies.movies);
   const loading = useSelector((state) => state.movies.loading);
 
@@ -72,6 +74,7 @@ const HomeMoviesCard = () => {
                 size="sm"
                 color="blue"
                 variant="outlined"
+                onClick={() => navigate(`/movie/${movie.id}`)}
               >
                 Details
               </Button>
