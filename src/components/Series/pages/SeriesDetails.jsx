@@ -24,7 +24,7 @@ import SeriesCastPage from "../components/Cast/SeriesCastPage";
 import LastSeason from "../components/Season/LastSeason";
 import Media from "../components/Media/Media";
 import Recommendations from "../components/Recommendtions/Recommendations";
-import RightSideDetails from "./RightSideDetails";
+import RightSideDetails from "../components/RightSide/RightSideDetails";
 import Social from "../components/Socail/Social";
 
 const SeriesDetails = () => {

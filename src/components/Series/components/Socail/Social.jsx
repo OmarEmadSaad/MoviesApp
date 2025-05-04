@@ -11,6 +11,7 @@ const Social = () => {
   const seriesReviews = useSelector(
     (state) => state.SeriesDetails.seriesReviews
   );
+
   const seriesReviewsLoading = useSelector(
     (state) => state.SeriesDetails.seriesReviewsLoading
   );
@@ -63,7 +64,7 @@ const Social = () => {
                     src={
                       review.author_details.avatar_path
                         ? `https://image.tmdb.org/t/p/w200${review.author_details.avatar_path}`
-                        : "https://placehold.co/100x100?text=No+Avatar"
+                        : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
                     }
                     alt={review.author}
                     className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover self-center sm:self-start"

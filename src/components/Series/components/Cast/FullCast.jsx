@@ -124,7 +124,7 @@ const FullCast = () => {
                           className="w-full h-60 object-cover rounded-t-md hover:cursor-pointer"
                           onClick={() => {
                             navigate(
-                              `/person/${actor.id}/hisname/${actor.name
+                              `/person/${member.id}/hisname/${member.name
                                 .replace(/\s+/g, "-")
                                 .toLowerCase()}`
                             );

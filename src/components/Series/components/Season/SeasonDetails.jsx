@@ -63,7 +63,7 @@ const SeasonDetails = () => {
                 src={
                   seasonDetails.poster_path
                     ? `https://image.tmdb.org/t/p/w500${seasonDetails.poster_path}`
-                    : "https://placehold.co/200x300?text=No+Image"
+                    : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
                 }
                 alt={seasonDetails.name}
                 className="rounded-xl w-48  mt-3 md:w-72 h-[50vh] md:h-[60vh] shadow-lg"
@@ -113,7 +113,7 @@ const SeasonDetails = () => {
                           src={
                             episode.still_path
                               ? `https://image.tmdb.org/t/p/w200${episode.still_path}`
-                              : "https://placehold.co/200x112?text=No+Image"
+                              : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
                           }
                           alt={episode.name}
                           className="w-24 h-22 object-cover rounded-md"

@@ -70,7 +70,7 @@ const AllReview = () => {
             src={
               seriesDetails.poster_path
                 ? `https://image.tmdb.org/t/p/w200${seriesDetails.poster_path}`
-                : "https://placehold.co/200x300?text=No+Image"
+                : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
             }
             alt={seriesDetails.name || "Series Poster"}
             className="w-32 h-48 sm:w-40 sm:h-60 rounded-lg object-cover mx-auto sm:mx-0"

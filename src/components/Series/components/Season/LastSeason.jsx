@@ -19,7 +19,7 @@ const LastSeason = () => {
 
   const seasons = seriesDetails?.seasons || [];
   const firstSeason = seasons
-    .filter((season) => season.season_number !== 0)
+    .filter((season) => season.season_number != 0)
     .sort((a, b) => a.season_number - b.season_number)[0];
 
   const handleSeasonClick = (seasonNumber) => {
@@ -45,7 +45,7 @@ const LastSeason = () => {
             src={
               firstSeason.poster_path
                 ? `https://image.tmdb.org/t/p/w200${firstSeason.poster_path}`
-                : "https://placehold.co/200x300?text=No+Image"
+                : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
             }
             alt={firstSeason.name || "No Image"}
             className="w-36 h-52 object-cover rounded-md"
