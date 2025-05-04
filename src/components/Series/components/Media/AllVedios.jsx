@@ -35,7 +35,7 @@ const AllVideos = () => {
           </h1>
           <p className="text-gray-300 mb-4">Year: {releaseYear}</p>
           <button
-            onClick={() => navigate(`/series/${id}`)} // رجوع لصفحة تفاصيل المسلسل
+            onClick={() => navigate(-1)}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
           >
             Back to Series

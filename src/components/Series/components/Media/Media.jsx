@@ -81,7 +81,7 @@ const Media = () => {
                   <div className="flex items-center justify-center bg-gray-700 rounded w-[300px] h-48 shrink-0">
                     <button
                       onClick={() =>
-                        navigate(`/series/${effectiveSeriesId}/videos`)
+                        navigate(`/series/${seriesAllVideos}/videos`)
                       }
                       className="text-white font-medium hover:text-purple-400 transition w-full h-full"
                     >
@@ -118,7 +118,7 @@ const Media = () => {
                   <div className="flex items-center justify-center bg-gray-700 rounded w-[200px] h-[300px] shrink-0">
                     <button
                       onClick={() =>
-                        navigate(`/series/${effectiveSeriesId}/backdrops`)
+                        navigate(`/series/${seriesImages}/backdrops`)
                       }
                       className="text-white font-medium hover:text-purple-400 transition"
                     >
@@ -157,7 +157,7 @@ const Media = () => {
                   <div className="flex items-center justify-center bg-gray-700 rounded w-[200px] aspect-[2/3] shrink-0">
                     <button
                       onClick={() =>
-                        navigate(`/series/${effectiveSeriesId}/posters`)
+                        navigate(`/series/${seriesImages}/posters`)
                       }
                       className="text-white font-medium hover:text-purple-400 transition"
                     >
