@@ -16,11 +16,17 @@ import {
   getMovieDetails,
   getMovieCastDetails,
   getMovieTrialVideo,
+  getMovieReviews,
 } from "../../Redux/DetailsMoviesSlice/movieDetailsSlice";
 import Loading from "../../apiRequestError-Loading/Loading";
 import Requesterror from "../../apiRequestError-Loading/Requesterror";
 import Videofram from "../components/Videofram";
 import Topbilledslick from "../components/Topbilledslick";
+import ReviewCard from "../components/ReviewCard";
+import RecomindationCard from "../components/RecomindationCard";
+import Moviemedia from "../components/Moviemedia";
+import Social from "../components/Social";
+import MovieKeywords from "../components/MovieKeywords";
 
 const MovieDetails = () => {
   const [show, setshow] = useState(false);
@@ -31,10 +37,15 @@ const MovieDetails = () => {
   const onemovie = useSelector((state) => {
     return state.onemoviedetails;
   });
+  const { MovieReviews, movieCollection } = useSelector((state) => {
+    return state.onemoviedetails;
+  });
+
   useEffect(() => {
     dispatch(getMovieDetails(id));
     dispatch(getMovieCastDetails(id));
     dispatch(getMovieTrialVideo(id));
+    dispatch(getMovieReviews(id));
   }, [id]);
   if (onemovie.movieDetailsLoading) {
     return <Loading />;
@@ -49,7 +60,7 @@ const MovieDetails = () => {
   };
 
   return (
-    <div>
+    <div className="w-[100%]">
       <section
         className="relative bg-cover bg-center bg-no-repeat min-h-[70vh] sm:min-h-[60vh] md:min-h-[70vh]"
         style={{
@@ -217,19 +228,67 @@ const MovieDetails = () => {
           />
         )}
       </section>
-      <section className="relative py-6 sm:py-8">
-        <span className="text-light-blue-600 text-lg sm:text-xl md:text-[1.5em] font-bold ml-4 sm:ml-9">
-          top billed cast
-        </span>
-        <Topbilledslick
-          className="relative"
-          topbilledcast={onemovie.topbilledcast}
-        />
-        <Link to={`/movie/${onemovie.movieDetails.id}/cast_crew`}>
-          <span className="text-light-blue-600 ml-4 sm:ml-8 text-sm sm:text-base md:text-[1em] hover:text-light-blue-300">
-            Full Cast & Crew
-          </span>
-        </Link>
+      <section className="flex flex-col  lg:flex-row justify-between ">
+        <div className="w-[95%] mx-auto md:w-[70%]">
+          <section className="relative py-6 sm:py-8 ">
+            <span className="text-light-blue-600 text-lg sm:text-xl md:text-[1.5em] font-bold ml-4 sm:ml-9">
+              top billed cast
+            </span>
+            <Topbilledslick
+              className="relative"
+              topbilledcast={onemovie.topbilledcast}
+            />
+            <Link to={`/movie/${onemovie.movieDetails.id}/cast_crew`}>
+              <span className="text-light-blue-600 ml-4 sm:ml-8 text-sm sm:text-base md:text-[1em] hover:text-light-blue-300">
+                Full Cast & Crew
+              </span>
+            </Link>
+          </section>
+          <section className="mx-auto mb-6">
+            <div>
+              <div className="">
+                <h2 className="text-blue-500 text-[1.8em] font-semibold ml-7 mb-10">
+                  social
+                </h2>
+
+                <div className="relative flex flex-col items-start">
+                  <h3 className="text-green-500  border-b border-red-500 w-fit ml-10 text-[1.4em] absolute  -top-7 -left-2 md:left-5 lg:left-[13%]    ">
+                    reviews {MovieReviews.length}
+                  </h3>
+                  <ReviewCard
+                    all={false}
+                    MovieReviews={MovieReviews[0]}></ReviewCard>
+
+                  <Link to={`/movie/${id}/movie_review`}>
+                    <h2 className="text-blue-500  pt-5  border-b border-red-500 w-fit ml-10 text-[1.4em] absolute  -bottom-7 -left-2 md:left-5 lg:left-[13%]    ">
+                      Read All Reviews
+                    </h2>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div>social and key words</div>
+          </section>
+          <section className="text-white  ">
+            <h2 className="text-[1.5em] text-blue-600">media</h2>
+            <Moviemedia />
+          </section>
+          <section>
+            <h2>recomindations</h2>
+            <RecomindationCard />
+          </section>
+        </div>
+        <div className="text-[1.5em] p-5 text-white flex flex-col gap-5 mt-6 items-center text-center ">
+          <div className=" ">
+            <Social moviedetails={onemovie.movieDetails} />
+          </div>
+          <div>
+            <h1 className="text-left ml-6 mb-2 text-blue-600 font-bold">
+              keywords
+            </h1>
+            <MovieKeywords />
+          </div>
+        </div>
       </section>
     </div>
   );

@@ -7,6 +7,9 @@ import Movies from "./components/Movies/pages/Movies";
 import Series from "./components/Series/pages/Series";
 import MovieDetails from "./components/Movies/pages/MovieDetails";
 import MovieCastCrew from "./components/Movies/pages/MovieCastCrew";
+import MovieReviewPage from "./components/Movies/pages/MovieReviewPage";
+import PersonPage from "./components/Movies/pages/PersonPage";
+import NotFound from "./NotFound";
 const App = () => {
   return (
     <div className="bg-black">
@@ -18,6 +21,9 @@ const App = () => {
         <Route path="/series" element={<Series />} />
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/movie/:id/cast_crew" element={<MovieCastCrew />} />
+        <Route path="/movie/:id/movie_review" element={<MovieReviewPage />} />
+        <Route path="/person/:id" element={<PersonPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>
