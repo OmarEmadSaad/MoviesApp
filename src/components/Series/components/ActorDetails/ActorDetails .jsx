@@ -232,7 +232,7 @@ const ActorDetails = () => {
                         src={
                           work.poster_path
                             ? `https://image.tmdb.org/t/p/w185${work.poster_path}`
-                            : "https://via.placeholder.com/140"
+                            : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
                         }
                         alt={work.title || work.name}
                         className="w-full h-40 sm:h-48 md:h-56 object-cover rounded-t-lg cursor-pointer"
