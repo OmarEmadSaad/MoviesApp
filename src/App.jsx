@@ -12,7 +12,7 @@ import FullCast from "./components/Series/components/Cast/FullCast";
 import AllSeason from "./components/Series/components/Season/AllSeason";
 import SeasonDetails from "./components/Series/components/Season/SeasonDetails";
 import Recommendations from "./components/Series/components/Recommendtions/Recommendations";
-import RightSideDetails from "./components/Series/pages/RightSideDetails";
+import RightSideDetails from "./components/Series/components/RightSide/RightSideDetails";
 import ActorDetails from "./components/Series/components/ActorDetails/ActorDetails ";
 import AllVideos from "./components/Series/components/Media/AllVedios";
 import BackDrops from "./components/Series/components/Media/BackDrops";

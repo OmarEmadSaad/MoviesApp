@@ -336,7 +336,7 @@ export const getPersonKnownFor = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.cast.slice(4, 7);
+      return data.cast.slice(0, 4);
     } catch (error) {
       return rejectWithValue(error.message);
     }

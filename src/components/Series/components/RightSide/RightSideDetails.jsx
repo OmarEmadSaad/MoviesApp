@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaHome, FaVideo } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { getSeriesKeywords } from "../../Redux/DetailsSeriesSlice/DetailsSeriesSlice";
+import { getSeriesKeywords } from "../../../Redux/DetailsSeriesSlice/DetailsSeriesSlice";
 
 const RightSideDetails = () => {
   const dispatch = useDispatch();
@@ -27,12 +27,12 @@ const RightSideDetails = () => {
 
   const tmdbUrl = seriesDetails?.id
     ? `https://www.themoviedb.org/tv/${seriesDetails.id}`
-    : "#";
+    : "";
 
-  const homepageUrl = seriesDetails?.homepage || "#";
+  const homepageUrl = seriesDetails?.homepage || "";
 
   const languageInfo = languages?.find(
-    (lang) => lang.iso_639_1 === seriesDetails?.original_language
+    (lang) => lang.iso_639_1 == seriesDetails?.original_language
   );
   const languageDisplay = languageInfo
     ? `${seriesDetails?.original_language?.toUpperCase()}: ${

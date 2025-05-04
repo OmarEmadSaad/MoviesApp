@@ -41,7 +41,7 @@ const AllSeason = () => {
               src={
                 seriesDetails?.poster_path
                   ? `https://image.tmdb.org/t/p/w300${seriesDetails.poster_path}`
-                  : "https://placehold.co/200x300?text=No+Image"
+                  : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
               }
               alt={seriesDetails?.name || "Series Poster"}
               className="w-32 sm:w-48 h-auto object-cover rounded-md"
@@ -77,7 +77,6 @@ const AllSeason = () => {
         </div>
       )}
 
-      {/* قسم المواسم */}
       <h2 className="text-2xl font-bold mb-4">All Seasons</h2>
       {seriesDetailsLoading ? (
         <Loading />
@@ -97,7 +96,7 @@ const AllSeason = () => {
                   src={
                     season.poster_path
                       ? `https://image.tmdb.org/t/p/w200${season.poster_path}`
-                      : "https://placehold.co/200x300?text=No+Image"
+                      : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-blank-avatar-modern-vector-png-image_40962406.jpg"
                   }
                   alt={season.name}
                   className="w-24 h-36 object-cover rounded-md"
