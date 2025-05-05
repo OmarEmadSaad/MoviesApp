@@ -8,12 +8,14 @@ import {
 } from "@material-tailwind/react";
 import RatingWithStars from "../../Movies/components/RatingWithStars";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function SeriesCard({
   poster_path,
   name,
   vote_average,
   overview,
+  id,
 }) {
   const [showmore, setshowmore] = useState(true);
 
@@ -72,14 +74,16 @@ export default function SeriesCard({
           )}
         </CardBody>
         <CardFooter className="pt-3 flex justify-center">
-          <Button
-            className="hover:bg-light-blue-500 hover:text-black mt-2"
-            size="sm"
-            color="blue"
-            variant="outlined"
-          >
-            Details
-          </Button>
+          <Link to={`/series/${id}`}>
+            <Button
+              className="hover:bg-light-blue-500 hover:text-black mt-2"
+              size="sm"
+              color="blue"
+              variant="outlined"
+            >
+              details
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>

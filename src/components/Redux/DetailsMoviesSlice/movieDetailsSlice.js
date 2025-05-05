@@ -422,12 +422,15 @@ const initialState = {
   movieDetails: {},
   movieDetailsLoading: false,
   movieDetailsError: "",
+
   moviecastDetails: [],
   moviecastDetailsLoading: false,
   moviecastDetailsError: "",
+
   movievideotrailerUrl: "",
   movievideotrailerUrlLoading: true,
   movievideotrailerUrlError: "",
+
   topbilledcast: [],
   moviecrew: [],
   movie: [],

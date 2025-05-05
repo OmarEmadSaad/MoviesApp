@@ -12,76 +12,89 @@ import {
   Button,
 } from "@material-tailwind/react";
 import { FaCirclePlay } from "react-icons/fa6";
-import {
-  getMovieDetails,
-  getMovieCastDetails,
-  getMovieTrialVideo,
-  getMovieReviews,
-} from "../../Redux/DetailsMoviesSlice/movieDetailsSlice";
 import Loading from "../../apiRequestError-Loading/Loading";
 import Requesterror from "../../apiRequestError-Loading/Requesterror";
-import Videofram from "../components/Videofram";
-import Topbilledslick from "../components/Topbilledslick";
-import ReviewCard from "../components/ReviewCard";
-import RecomindationCard from "../components/RecomindationCard";
-import Moviemedia from "../components/Moviemedia";
-import Social from "../components/Social";
-import MovieKeywords from "../components/MovieKeywords";
+import {
+  getSeriesTrialVideo,
+  getSeriesDetails,
+  getSeriesCastDetails,
+} from "../../Redux/DetailsSeriesSlice/DetailsSeriesSlice";
+import Videofram from "../../Movies/components/Videofram";
+import SeriesCastPage from "../components/Cast/SeriesCastPage";
+import LastSeason from "../components/Season/LastSeason";
+import Media from "../components/Media/Media";
+import Recommendations from "../components/Recommendtions/Recommendations";
+import RightSideDetails from "../components/RightSide/RightSideDetails";
+import Social from "../components/Socail/Social";
 
-const MovieDetails = () => {
+const SeriesDetails = () => {
   const [show, setshow] = useState(false);
   const [fillstar, setfillstar] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const onemovie = useSelector((state) => {
-    return state.onemoviedetails;
-  });
-  const { MovieReviews, movieCollection } = useSelector((state) => {
-    return state.onemoviedetails;
-  });
+  const seriesdetails = useSelector((state) => state.SeriesDetails);
 
   useEffect(() => {
-    dispatch(getMovieDetails(id));
-    dispatch(getMovieCastDetails(id));
-    dispatch(getMovieTrialVideo(id));
-    dispatch(getMovieReviews(id));
-  }, [id]);
+    dispatch(getSeriesDetails(id));
+    dispatch(getSeriesTrialVideo(id));
+    dispatch(getSeriesCastDetails(id));
+  }, [id, dispatch]);
 
-  if (onemovie.movieDetailsLoading) {
+  if (
+    !seriesdetails ||
+    seriesdetails.seriesDetailsLoading ||
+    seriesdetails.seriescastDetailsLoading
+  ) {
     return <Loading />;
   }
-  if (onemovie.movieDetailsError) {
+  if (
+    seriesdetails.seriesDetailsError ||
+    !seriesdetails.seriesDetails ||
+    seriesdetails.seriescastDetailsError
+  ) {
     return <Requesterror />;
   }
 
   const converttime = (minutes) => {
+    if (!minutes) return "No runtime available";
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}min`;
   };
 
-  const videoSrc = `https://www.youtube.com/embed/${onemovie.movievideotrailerUrl}?modestbranding=1&autohide=1&showinfo=0`;
+  const runtime =
+    seriesdetails.seriesDetails.episode_run_time &&
+    seriesdetails.seriesDetails.episode_run_time.length > 0
+      ? seriesdetails.seriesDetails.episode_run_time[0]
+      : null;
+
+  const videoSrc = seriesdetails.seriesvideotrailerUrl
+    ? `https://www.youtube.com/embed/${seriesdetails.seriesvideotrailerUrl}?modestbranding=1&autohide=1&showinfo=0`
+    : "";
 
   return (
-    <div className="w-[100%]">
+    <div>
       <section
         className="relative bg-cover bg-center bg-no-repeat min-h-[70vh] sm:min-h-[60vh] md:min-h-[70vh]"
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/original${onemovie.movieDetails.backdrop_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${
+            seriesdetails.seriesDetails.backdrop_path || ""
+          })`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent">
           <h2 className="text-light-blue-500 text-center py-2 text-2xl sm:text-3xl md:text-4xl">
-            Movie-Details
+            Series-Details
           </h2>
         </div>
-
         <Card className="bg-transparent w-full flex-col justify-evenly items-center lg:flex-row">
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-10 md:py-12 flex flex-col lg:flex-row gap-8 sm:gap-12 md:gap-16">
             <div className="w-full lg:w-[320px] flex-shrink-0 flex justify-center lg:justify-start">
               <img
-                src={`https://image.tmdb.org/t/p/w500${onemovie.movieDetails.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w500${
+                  seriesdetails.seriesDetails.poster_path || ""
+                }`}
                 alt="Poster"
                 className="rounded-xl w-48 sm:w-64 md:w-72 h-[50vh] md:h-[60vh] lg:h-[70vh] shadow-lg mt-2"
               />
@@ -92,18 +105,18 @@ const MovieDetails = () => {
                 color="white"
                 className="text-base sm:text-lg md:text-[1.5em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
               >
-                {onemovie.movieDetails.title || "No title available"}
+                {seriesdetails.seriesDetails.name || "No name available"}
               </Typography>
               <Typography
                 variant="h6"
                 color="white"
                 className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
               >
-                {onemovie.movieDetails.release_date ||
-                  "No release_date available"}{" "}
+                {seriesdetails.seriesDetails.first_air_date ||
+                  "No release date available"}{" "}
                 (
-                {onemovie.movieDetails.original_language ||
-                  "No original_language available"}
+                {seriesdetails.seriesDetails.original_language ||
+                  "No original language available"}
                 )
               </Typography>
               <Typography
@@ -112,9 +125,11 @@ const MovieDetails = () => {
                 className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
               >
                 <span>👉</span>
-                {onemovie.movieDetails.genres?.map((genre) => (
-                  <span key={genre.id}>{genre.name}, </span>
-                )) || "No genres available"}
+                {seriesdetails.seriesDetails.genres?.length > 0
+                  ? seriesdetails.seriesDetails.genres.map((genre) => (
+                      <span key={genre.id}>{genre.name}, </span>
+                    ))
+                  : "No genres available"}
                 <span>👈</span>
               </Typography>
               <Typography
@@ -123,11 +138,9 @@ const MovieDetails = () => {
                 className="text-base sm:text-lg md:text-xl mb-1 sm:mb-2"
               >
                 <span>👉</span>
-                {converttime(onemovie.movieDetails?.runtime) ||
-                  "No runtime available"}
+                {converttime(runtime)}
                 <span>👈</span>
               </Typography>
-
               <Typography
                 variant="h5"
                 color="white"
@@ -136,9 +149,9 @@ const MovieDetails = () => {
                 <span className="text-[0.9em] sm:text-[0.8em] md:text-[1.2em] text-blue-500">
                   overview :{" "}
                 </span>
-                {onemovie.movieDetails.overview || "No overview available"}
+                {seriesdetails.seriesDetails.overview ||
+                  "No overview available"}
               </Typography>
-
               <Typography
                 as={"div"}
                 variant="h4"
@@ -147,12 +160,12 @@ const MovieDetails = () => {
                 <span className="text-[0.9em] sm:text-[0.8em] md:text-[1em] text-blue-500">
                   casting :
                 </span>
-                <div className=" flex flex-col items-center lg:items-start gap-3 sm:gap-4">
+                <div className="flex flex-col items-center lg:items-start gap-3 sm:gap-4">
                   <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:gap-6 lg:gap-8">
-                    {onemovie.moviecastDetails.cast
-                      ?.slice(0, 3)
-                      .map((artist) => {
-                        return (
+                    {seriesdetails.seriescastDetails.cast?.length > 0 ? (
+                      seriesdetails.seriescastDetails.cast
+                        .slice(0, 3)
+                        .map((artist) => (
                           <div
                             key={artist.id}
                             className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center"
@@ -164,16 +177,21 @@ const MovieDetails = () => {
                               {artist.known_for_department}
                             </span>
                           </div>
-                        );
-                      })}
+                        ))
+                    ) : (
+                      <span className="text-white">No cast available</span>
+                    )}
                   </div>
+                  <span className="text-[0.9em] sm:text-[0.8em] md:text-[1em] text-blue-500">
+                    Carw :
+                  </span>
                   <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:gap-6 lg:gap-8">
-                    {onemovie.moviecastDetails.moviecrew
-                      ?.slice(0, 3)
-                      .map((person, index) => {
-                        return (
+                    {seriesdetails.seriescastDetails.crew?.length > 0 ? (
+                      seriesdetails.seriescastDetails.crew
+                        .slice(0, 3)
+                        .map((person) => (
                           <div
-                            key={index}
+                            key={person.id}
                             className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center text-center"
                           >
                             <span className="text-white">{person.name}</span>
@@ -181,8 +199,10 @@ const MovieDetails = () => {
                               {person.known_for_department}
                             </span>
                           </div>
-                        );
-                      })}
+                        ))
+                    ) : (
+                      <span className="text-white">No crew available</span>
+                    )}
                   </div>
                 </div>
               </Typography>
@@ -244,70 +264,25 @@ const MovieDetails = () => {
           />
         )}
       </section>
-      <section className="flex flex-col  lg:flex-row justify-between ">
-        <div className="w-[95%] mx-auto md:w-[70%]">
-          <section className="relative py-6 sm:py-8 ">
-            <span className="text-light-blue-600 text-lg sm:text-xl md:text-[1.5em] font-bold ml-4 sm:ml-9">
-              top billed cast
+      <div className="flex flex-col lg:flex-row gap-6 mt-6 px-4">
+        <div className="w-full lg:w-[70%]">
+          <section className="relative py-6 sm:py-8">
+            <span className="text-light-blue-600 text-lg sm:text-xl md:text-[1.5em] font-bold">
+              Series Cast
             </span>
-            <Topbilledslick
-              className="relative"
-              topbilledcast={onemovie.topbilledcast}
-            />
-            <Link to={`/movie/${onemovie.movieDetails.id}/cast_crew`}>
-              <span className="text-light-blue-600 ml-4 sm:ml-8 text-sm sm:text-base md:text-[1em] hover:text-light-blue-300">
-                Full Cast & Crew
-              </span>
-            </Link>
-          </section>
-          <section className="mx-auto mb-6">
-            <div>
-              <div className="">
-                <h2 className="text-blue-500 text-[1.8em] font-semibold ml-7 mb-10">
-                  social
-                </h2>
-
-                <div className="relative flex flex-col items-start">
-                  <h3 className="text-green-500  border-b border-red-500 w-fit ml-10 text-[1.4em] absolute  -top-7 -left-2 md:left-5 lg:left-[13%]    ">
-                    reviews {MovieReviews.length}
-                  </h3>
-                  <ReviewCard
-                    all={false}
-                    MovieReviews={MovieReviews[0]}></ReviewCard>
-
-                  <Link to={`/movie/${id}/movie_review`}>
-                    <h2 className="text-blue-500  pt-5  border-b border-red-500 w-fit ml-10 text-[1.4em] absolute  -bottom-7 -left-2 md:left-5 lg:left-[13%]    ">
-                      Read All Reviews
-                    </h2>
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div>social and key words</div>
-          </section>
-          <section className="text-white  ">
-            <h2 className="text-[1.5em] text-blue-600">media</h2>
-            <Moviemedia />
-          </section>
-          <section>
-            <h2>recomindations</h2>
-            <RecomindationCard />
+            <SeriesCastPage />
+            <LastSeason />
+            <Social />
+            <Media />
+            <Recommendations />
           </section>
         </div>
-        <div className="text-[1.5em] p-5 text-white flex flex-col gap-5 mt-6 items-center text-center ">
-          <div className=" ">
-            <Social moviedetails={onemovie.movieDetails} />
-          </div>
-          <div>
-            <h1 className="text-left ml-6 mb-2 text-blue-600 font-bold">
-              keywords
-            </h1>
-            <MovieKeywords />
-          </div>
+        <div className="w-full lg:w-[30%]">
+          <RightSideDetails />
         </div>
-      </section>
+      </div>
     </div>
   );
 };
 
-export default MovieDetails;
+export default SeriesDetails;

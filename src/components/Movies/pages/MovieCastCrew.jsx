@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -8,7 +8,6 @@ import {
 import { CrewCard } from "../components/CrewCard";
 import { CastCard } from "../components/CastCard";
 import CastCrewPageHeader from "../components/CastCrewPageHeader";
-
 
 const MovieCastCrew = () => {
   const {
