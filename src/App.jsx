@@ -7,6 +7,9 @@ import Movies from "./components/Movies/pages/Movies";
 import Series from "./components/Series/pages/Series";
 import MovieDetails from "./components/Movies/pages/MovieDetails";
 import MovieCastCrew from "./components/Movies/pages/MovieCastCrew";
+import MovieReviewPage from "./components/Movies/pages/MovieReviewPage";
+import PersonPage from "./components/Movies/pages/PersonPage";
+import NotFound from "./NotFound";
 import SeriesDetails from "./components/Series/pages/SeriesDetails";
 import FullCast from "./components/Series/components/Cast/FullCast";
 import AllSeason from "./components/Series/components/Season/AllSeason";
@@ -19,7 +22,6 @@ import BackDrops from "./components/Series/components/Media/BackDrops";
 import AllPoster from "./components/Series/components/Media/AllPoster";
 import AllReview from "./components/Series/components/Socail/AllReview";
 import Social from "./components/Series/components/Socail/Social";
-
 const App = () => {
   return (
     <div className="bg-black">
@@ -31,6 +33,9 @@ const App = () => {
         <Route path="/series" element={<Series />} />
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/movie/:id/cast_crew" element={<MovieCastCrew />} />
+        <Route path="/movie/:id/movie_review" element={<MovieReviewPage />} />
+        <Route path="/person/:id" element={<PersonPage />} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/series/:id" element={<SeriesDetails />} />
         <Route path="/series/:id/cast" element={<FullCast />} />
         <Route path="/series/:id/seasons" element={<AllSeason />} />
