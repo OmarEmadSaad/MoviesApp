@@ -22,6 +22,7 @@ import BackDrops from "./components/Series/components/Media/BackDrops";
 import AllPoster from "./components/Series/components/Media/AllPoster";
 import AllReview from "./components/Series/components/Socail/AllReview";
 import Social from "./components/Series/components/Socail/Social";
+import SearchResults from "./components/Series/components/SearchResults/SearchResults";
 const App = () => {
   return (
     <div className="bg-black">
@@ -35,7 +36,6 @@ const App = () => {
         <Route path="/movie/:id/cast_crew" element={<MovieCastCrew />} />
         <Route path="/movie/:id/movie_review" element={<MovieReviewPage />} />
         <Route path="/person/:id" element={<PersonPage />} />
-        <Route path="*" element={<NotFound />} />
         <Route path="/series/:id" element={<SeriesDetails />} />
         <Route path="/series/:id/cast" element={<FullCast />} />
         <Route path="/series/:id/seasons" element={<AllSeason />} />
@@ -57,6 +57,8 @@ const App = () => {
           path="/person/:personId/hisname/:personName"
           element={<ActorDetails />}
         />
+        <Route path="/search/:type/:query" element={<SearchResults />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>

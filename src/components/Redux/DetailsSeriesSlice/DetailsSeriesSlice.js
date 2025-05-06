@@ -374,6 +374,35 @@ export const getPersonSocialMedia = createAsyncThunk(
   }
 );
 
+export const getSeriesBySearch = createAsyncThunk(
+  "/getSeriesBySearch",
+  async (seriesName, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+      const config = {
+        method: "get",
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1MDdmZGZlYWU0OGU4N2U0NTQ4YTM5ZmZkZjczYmU3NiIsIm5iZiI6MTc0NTYwMzQ2OC42MDcsInN1YiI6IjY4MGJjYjhjOGJjZWE2NmE4NmFiMDQ0MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fcri0wbTR6owlEOMJmZVOYPPUKpPm2vHqUCwEtqGAw8",
+          accept: "application/json",
+        },
+      };
+
+      const req = await fetch(
+        `https://api.themoviedb.org/3/search/tv?query=${seriesName}`,
+        config
+      );
+      if (!req.ok) {
+        throw new Error("Failed to fetch series data");
+      }
+      const res = await req.json();
+      return res.results;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const initialState = {
   seriesDetails: null,
   seriesDetailsLoading: false,
@@ -426,6 +455,10 @@ const initialState = {
   PersonSocialMedia: null,
   PersonSocialMediaLoading: false,
   PersonSocialMediaError: null,
+
+  getSeriesBySearch: null,
+  getSeriesBySearchLoading: false,
+  getSeriesBySearchError: null,
 };
 
 const SeriesDetailsSlice = createSlice({
@@ -603,6 +636,21 @@ const SeriesDetailsSlice = createSlice({
         state.PersonSocialMediaLoading = false;
         state.PersonSocialMedia = null;
         state.PersonSocialMediaError = action.payload;
+      })
+
+      .addCase(getSeriesBySearch.pending, (state) => {
+        state.getSeriesBySearchLoading = true;
+        state.getSeriesBySearchError = null;
+      })
+      .addCase(getSeriesBySearch.fulfilled, (state, action) => {
+        state.getSeriesBySearchLoading = false;
+        state.getSeriesBySearch = action.payload;
+        state.getSeriesBySearchError = null;
+      })
+      .addCase(getSeriesBySearch.rejected, (state, action) => {
+        state.getSeriesBySearchLoading = false;
+        state.getSeriesBySearch = null;
+        state.getSeriesBySearchError = action.payload;
       });
   },
 });

@@ -37,7 +37,7 @@ const Topbilledslick = () => {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     initialSlide: 0,
     prevArrow: <PrevArrow />,
@@ -46,7 +46,7 @@ const Topbilledslick = () => {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },

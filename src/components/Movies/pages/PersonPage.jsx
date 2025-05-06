@@ -120,7 +120,6 @@
 // };
 
 // export default PersonPage;
-
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -156,7 +155,8 @@ const PersonPage = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 2 }}
-      className="bg-transparent  text-black w-[95%] mx-auto py-6 px-4 flex flex-col lg:flex-row gap-8">
+      className="bg-transparent  text-black w-[95%] mx-auto py-6 px-4 flex flex-col lg:flex-row gap-8"
+    >
       <div className=" flex flex-col items-center lg:w-1/3 w-full">
         <img
           src={`https://image.tmdb.org/t/p/w500${persondetails.profile_path}`}
@@ -168,28 +168,32 @@ const PersonPage = () => {
           {personSocialLinks.facebook_id && (
             <Link
               to={`https://www.facebook.com/${personSocialLinks.facebook_id}`}
-              target="_blank">
+              target="_blank"
+            >
               <BsFacebook />
             </Link>
           )}
           {personSocialLinks.twitter_id && (
             <Link
               to={`https://www.twitter.com/${personSocialLinks.twitter_id}`}
-              target="_blank">
+              target="_blank"
+            >
               <FaTwitter />
             </Link>
           )}
           {personSocialLinks.instagram_id && (
             <Link
               to={`https://www.instagram.com/${personSocialLinks.instagram_id}`}
-              target="_blank">
+              target="_blank"
+            >
               <FaInstagram />
             </Link>
           )}
           {personSocialLinks.wikidata_id && (
             <Link
               to={`https://www.wikidata.org/wiki/${personSocialLinks.wikidata_id}`}
-              target="_blank">
+              target="_blank"
+            >
               <BsWikipedia />
             </Link>
           )}
@@ -245,9 +249,14 @@ const PersonPage = () => {
               Also Known As:
             </p>
             <p className="text-white text-[1.2em] flex flex-col gap-2">
-              {persondetails.also_known_as?.map((name, index) => {
-                return <span key={index}> {name} </span>;
-              }) || "not yet"}
+              {persondetails.also_known_as &&
+              persondetails.also_known_as.length > 0 ? (
+                persondetails.also_known_as.map((name, index) => (
+                  <span key={index}>{name}</span>
+                ))
+              ) : (
+                <span>not yet</span>
+              )}
             </p>
           </div>
         </div>
@@ -271,10 +280,8 @@ const PersonPage = () => {
           <h2 className="text-xl font-semibold mb-2">Known For</h2>
           <div className="flex flex-wrap gap-4">
             {personMovieCredits?.slice(0, 3).map((item) => (
-              <Link to={`/movie/${item.id}`}>
-                <div
-                  key={item.id}
-                  className="w-[150px] sm:w-[180px] bg-white shadow-md rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl">
+              <Link to={`/movie/${item.id}`} key={item.id}>
+                <div className="w-[150px] sm:w-[180px] bg-white shadow-md rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-2xl">
                   {item.poster_path ? (
                     <img
                       src={`https://image.tmdb.org/t/p/w300${item.poster_path}`}
@@ -301,7 +308,8 @@ const PersonPage = () => {
 
         <Button
           onClick={() => navigate(-1)}
-          className=" w-[20%] rounded-full transition-all duration-300 bg-transparent hover:bg-blue-500 border text-blue-600 hover:text-white  border-blue-600">
+          className=" w-[35%] sm:w-[25%] rounded-full transition-all duration-300 bg-transparent hover:bg-blue-500 border text-blue-600 hover:text-white  border-blue-600"
+        >
           Back a step
         </Button>
       </div>
