@@ -19,9 +19,9 @@ const SeriesCastPage = () => {
     <div className="p-2 flex justify-center sm:justify-start">
       {cast.length > 0 ? (
         <div className="flex overflow-x-auto sm:w-[55%] w-[75%] gap-4 pb-4 mt-2 ml-3">
-          {cast.slice(0, 10).map((actor) => (
+          {cast.slice(0, 10).map((actor, index) => (
             <div
-              key={actor.id}
+              key={`${actor.id}-${index}`}
               className="min-w-[150px] w-auto bg-gray-800 rounded-md shadow-sm hover:shadow-md transition"
             >
               <img
@@ -58,7 +58,7 @@ const SeriesCastPage = () => {
           </div>
         </div>
       ) : (
-        <p className="text-gray-600"> Sorry No Cast & Craw</p>
+        <p className="text-gray-600">Sorry No Cast & Craw</p>
       )}
     </div>
   );

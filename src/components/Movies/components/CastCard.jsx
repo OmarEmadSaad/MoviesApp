@@ -6,9 +6,10 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function CastCard({ character, name, profile_path }) {
+  const navigate = useNavigate();
   return (
     <Card className="mb-7 py-5 w-70 md:w-96 lg:w-[90%] shadow-lg flex md:flex-row  items-center justify-center md:justify-evenly bg-gray-700">
       <CardHeader floated={false} color="transparent" className="shadow-none  ">
@@ -27,14 +28,16 @@ export function CastCard({ character, name, profile_path }) {
         <Link>
           <Typography
             className=" text-center  font-medium text-white text-[1.8em]"
-            variant="h4">
+            variant="h4"
+          >
             {name || "not found"}
           </Typography>
         </Link>
         <div className="flex items-center justify-between text-center">
           <Typography
             variant="h3"
-            className="text-gray-400  font-medium text-[1.4em]">
+            className="text-gray-400  font-medium text-[1.4em]"
+          >
             {character || "not found"}
           </Typography>
         </div>
