@@ -87,7 +87,7 @@ export const getSeriesTrialVideo = createAsyncThunk(
       const video = data.results.find((result) => result.type === "Trailer");
 
       if (video) {
-        return `https://www.youtube.com/embed/${video.key}`;
+        return `https://www.youtube.com/embed/${video.key}?modestbranding=1&autohide=1&showinfo=0`;
       } else {
         return rejectWithValue("Sorry, no trailer available on YouTube 😞");
       }
