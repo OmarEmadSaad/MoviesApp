@@ -84,7 +84,7 @@ export const getMovieTrialVideo = createAsyncThunk(
       const video = await res.results.find((result) => {
         return result.type === "Trailer";
       });
-      console.log(video);
+      // console.log(video);
 
       if (video) {
         return `https://www.youtube.com/embed/${video.key}?modestbranding=1&autohide=1&showinfo=0`;

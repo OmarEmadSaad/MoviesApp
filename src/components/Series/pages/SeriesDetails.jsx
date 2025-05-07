@@ -34,7 +34,9 @@ const SeriesDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const seriesdetails = useSelector((state) => state.SeriesDetails);
-
+  const onvedio = useSelector((state) => {
+    return state.SeriesDetails;
+  });
   useEffect(() => {
     dispatch(getSeriesDetails(id));
     dispatch(getSeriesTrialVideo(id));
@@ -260,7 +262,7 @@ const SeriesDetails = () => {
           <Videofram
             open={show}
             handleOpen={() => setshow(!show)}
-            videoSrc={videoSrc}
+            videoSrc={onvedio.seriesvideotrailerUrl}
           />
         )}
       </section>

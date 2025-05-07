@@ -71,7 +71,8 @@ const MovieDetails = () => {
         className="relative bg-cover bg-center bg-no-repeat min-h-[70vh] sm:min-h-[60vh] md:min-h-[70vh]"
         style={{
           backgroundImage: `url(https://image.tmdb.org/t/p/original${onemovie.movieDetails.backdrop_path})`,
-        }}>
+        }}
+      >
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent">
           <h2 className="text-light-blue-500 text-center py-2 text-2xl sm:text-3xl md:text-4xl">
             Movie-Details
@@ -91,13 +92,15 @@ const MovieDetails = () => {
               <Typography
                 variant="h6"
                 color="white"
-                className="text-base sm:text-lg md:text-[1.5em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left">
+                className="text-base sm:text-lg md:text-[1.5em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
+              >
                 {onemovie.movieDetails.title || "No title available"}
               </Typography>
               <Typography
                 variant="h6"
                 color="white"
-                className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left">
+                className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
+              >
                 {onemovie.movieDetails.release_date ||
                   "No release_date available"}{" "}
                 (
@@ -108,7 +111,8 @@ const MovieDetails = () => {
               <Typography
                 variant="h6"
                 color="white"
-                className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left">
+                className="text-sm sm:text-base md:text-[1.2em] mb-2 sm:mb-3 md:mb-4 uppercase text-center lg:text-left"
+              >
                 <span>👉</span>
                 {onemovie.movieDetails.genres?.map((genre) => (
                   <span key={genre.id}>{genre.name}, </span>
@@ -118,7 +122,8 @@ const MovieDetails = () => {
               <Typography
                 variant="h4"
                 color="white"
-                className="text-base sm:text-lg md:text-xl mb-1 sm:mb-2">
+                className="text-base sm:text-lg md:text-xl mb-1 sm:mb-2"
+              >
                 <span>👉</span>
                 {converttime(onemovie.movieDetails?.runtime) ||
                   "No runtime available"}
@@ -128,7 +133,8 @@ const MovieDetails = () => {
               <Typography
                 variant="h5"
                 color="white"
-                className="text-sm sm:text-base md:text-lg mb-1 sm:mb-2">
+                className="text-sm sm:text-base md:text-lg mb-1 sm:mb-2"
+              >
                 <span className="text-[0.9em] sm:text-[0.8em] md:text-[1.2em] text-blue-500">
                   overview :{" "}
                 </span>
@@ -138,7 +144,8 @@ const MovieDetails = () => {
               <Typography
                 as={"div"}
                 variant="h4"
-                className="mb-1 sm:mb-2 flex flex-col items-center lg:items-start gap-1 sm:gap-2">
+                className="mb-1 sm:mb-2 flex flex-col items-center lg:items-start gap-1 sm:gap-2"
+              >
                 <span className="text-[0.9em] sm:text-[0.8em] md:text-[1em] text-blue-500">
                   casting :
                 </span>
@@ -150,7 +157,8 @@ const MovieDetails = () => {
                         return (
                           <div
                             key={artist.id}
-                            className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center">
+                            className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center"
+                          >
                             <span className="text-white w-fit mb-1 sm:mb-2">
                               {artist.name}
                             </span>
@@ -168,7 +176,8 @@ const MovieDetails = () => {
                         return (
                           <div
                             key={index}
-                            className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center text-center">
+                            className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center text-center"
+                          >
                             <span className="text-white">{person.name}</span>
                             <span className="text-yellow-700">
                               {person.known_for_department}
@@ -181,7 +190,8 @@ const MovieDetails = () => {
               </Typography>
               <Typography
                 as={"div"}
-                className="my-3 sm:my-4 md:my-5 font-normal flex gap-6 sm:gap-8 md:gap-10">
+                className="my-3 sm:my-4 md:my-5 font-normal flex gap-6 sm:gap-8 md:gap-10"
+              >
                 <div className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300">
                   <span>
                     <BsDatabaseAdd className="text-green-800 text-[1.5em] sm:text-[1.5em]" />
@@ -206,7 +216,8 @@ const MovieDetails = () => {
                 </div>
                 <div
                   onClick={() => setshow(!show)}
-                  className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300">
+                  className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+                >
                   <span>
                     <FaCirclePlay className="text-red-500 text-[1.5em] sm:text-[1.5em]" />
                   </span>
@@ -220,7 +231,8 @@ const MovieDetails = () => {
                 className="border-2 transition whitespace-nowrap px-2 py-2 min-w-[80px] text-light-blue-500 hover:text-white hover:bg-blue-800"
                 size="sm"
                 color="blue"
-                variant="outlined">
+                variant="outlined"
+              >
                 back a step
               </Button>
             </CardBody>
@@ -263,7 +275,8 @@ const MovieDetails = () => {
                   </h3>
                   <ReviewCard
                     all={false}
-                    MovieReviews={MovieReviews[0]}></ReviewCard>
+                    MovieReviews={MovieReviews[0]}
+                  ></ReviewCard>
 
                   <Link to={`/movie/${id}/movie_review`}>
                     <h2 className="text-blue-500  pt-5  border-b border-red-500 w-fit ml-10 text-[1.4em] absolute  -bottom-7 -left-2 md:left-5 lg:left-[13%]    ">
