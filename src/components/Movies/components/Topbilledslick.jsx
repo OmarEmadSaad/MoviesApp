@@ -9,8 +9,7 @@ const PrevArrow = ({ onClick }) => (
   <IconButton
     onClick={onClick}
     className="!absolute top-1/2 -translate-y-1/2 left-2 z-10 bg-gray-800 hover:bg-gray-700 text-white"
-    size="sm"
-  >
+    size="sm">
     <MdChevronLeft className="w-5 h-5" />
   </IconButton>
 );
@@ -19,8 +18,7 @@ const NextArrow = ({ onClick }) => (
   <IconButton
     onClick={onClick}
     className="!absolute top-1/2 -translate-y-1/2 right-2 z-10 bg-gray-800 hover:bg-gray-700 text-white"
-    size="sm"
-  >
+    size="sm">
     <MdChevronRight className="w-5 h-5" />
   </IconButton>
 );
@@ -30,14 +28,14 @@ const Topbilledslick = () => {
 
   const modifiedCast = [
     ...topbilledcast,
-    { id: "show-more", isShowMore: true },
-  ];
+   
+  ].slice(0,8);
 
   const settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     initialSlide: 0,
     prevArrow: <PrevArrow />,
@@ -46,7 +44,7 @@ const Topbilledslick = () => {
       {
         breakpoint: 1440,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 2,
           slidesToScroll: 1,
         },
       },

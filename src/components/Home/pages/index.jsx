@@ -11,9 +11,12 @@ import Loading from "../../apiRequestError-Loading/Loading";
 import Requesterror from "../../apiRequestError-Loading/Requesterror";
 import { fetchMovies } from "../../Redux/MoviesSlice/moviesSlice";
 import { fetchTvShows } from "../../Redux/SeriesSlice/seriesSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     movies,
     status: movieStatus,
@@ -103,9 +106,10 @@ const Home = () => {
               <div key={movie.id} className="p-2 flex justify-center">
                 <div className="bg-transparent rounded-lg overflow-hidden w-full max-w-xs sm:max-w-xs md:max-w-xs">
                   <img
+                    onClick={() => navigate(`/movie/${movie.id}`)}
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
-                    className="w-full h-auto aspect-[2/3] object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                    className="w-full h-auto aspect-[2/3] object-cover hover:cursor-pointer rounded-lg transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               </div>
@@ -126,6 +130,7 @@ const Home = () => {
               <div key={tvShow.id} className="p-2 flex justify-center">
                 <div className="bg-transparent rounded-lg overflow-hidden w-full max-w-xs sm:max-w-xs md:max-w-xs">
                   <img
+                    onClick={() => navigate(`/series/${tvShow.id}`)}
                     src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                     alt={tvShow.name}
                     className="w-full h-auto aspect-[2/3] object-cover rounded-lg transition-transform duration-300 hover:scale-105"
