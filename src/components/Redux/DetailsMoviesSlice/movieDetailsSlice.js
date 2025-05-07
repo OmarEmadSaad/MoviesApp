@@ -84,9 +84,10 @@ export const getMovieTrialVideo = createAsyncThunk(
       const video = await res.results.find((result) => {
         return result.type === "Trailer";
       });
+      console.log(video);
 
       if (video) {
-        return `https://www.youtube.com/embed/${video.key}`;
+        return `https://www.youtube.com/embed/${video.key}?modestbranding=1&autohide=1&showinfo=0`;
       }
     } catch (error) {
       return rejectWithValue(error.message);
@@ -172,6 +173,7 @@ export const getMoviecollection = createAsyncThunk(
         throw new Error("faild to fetch data");
       }
       const res = await req.json();
+      console.log(1111111111, res);
       return res;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -469,7 +471,6 @@ const initialState = {
 const movieDetailSlice = createSlice({
   name: "movieDetails",
   initialState,
-
   extraReducers: (builder) => {
     builder.addCase(getMoviebySearch.pending, (state) => {
       state.MoviebySearchLoading = true;
@@ -636,7 +637,7 @@ const movieDetailSlice = createSlice({
     builder.addCase(getMovieCastDetails.fulfilled, (state, action) => {
       state.moviecastDetails = action.payload;
       state.moviecastDetailsLoading = false;
-      state.topbilledcast = action.payload.cast.slice(0, 8);
+      state.topbilledcast = action.payload.cast;
       state.moviecrew = action.payload.crew;
       state.arrangecrewacordingtorole = action.payload.crew.reduce(
         (acc, person) => {

@@ -2,18 +2,7 @@ import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
 const TopCastSlickCard = ({ topactor }) => {
-  if (topactor.isShowMore) {
-    return (
-      <div className="px-2 flex justify-center sm:justify-start">
-        <div className="relative w-48 h-72 bg-gray-700 rounded-lg shadow-md p-6 transition duration-300 hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] group">
-          <Typography className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-base bg-transparent text-white px-3 py-1 rounded-lg transition-colors duration-300 hover:bg-blue-700">
-            Show More
-          </Typography>
-        </div>
-      </div>
-    );
-  }
-
+  
   return (
     <div className="px-2 mx-auto sm:mx-0 mt-2">
       <Link to={`/person/${topactor.id}`}>
