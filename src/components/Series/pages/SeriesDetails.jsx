@@ -43,6 +43,19 @@ const SeriesDetails = () => {
     dispatch(getSeriesCastDetails(id));
   }, [id, dispatch]);
 
+  useEffect(() => {
+    if (
+      seriesdetails.seriesDetailsError ||
+      (!seriesdetails.seriesDetailsLoading && !seriesdetails.seriesDetails)
+    ) {
+      navigate("/not-found");
+    }
+  }, [
+    seriesdetails.seriesDetailsError,
+    seriesdetails.seriesDetails,
+    seriesdetails.seriesDetailsLoading,
+    navigate,
+  ]);
   if (
     !seriesdetails ||
     seriesdetails.seriesDetailsLoading ||
@@ -70,11 +83,19 @@ const SeriesDetails = () => {
     seriesdetails.seriesDetails.episode_run_time.length > 0
       ? seriesdetails.seriesDetails.episode_run_time[0]
       : null;
-
-  const videoSrc = seriesdetails.seriesvideotrailerUrl
-    ? `https://www.youtube.com/embed/${seriesdetails.seriesvideotrailerUrl}?modestbranding=1&autohide=1&showinfo=0`
-    : "";
-
+  const handlePlayTrailer = () => {
+    if (seriesdetails.seriesvideotrailerUrl) {
+      setshow(true);
+    } else {
+      const homepage = seriesdetails.seriesDetails.homepage;
+      if (homepage) {
+        alert("No trailer available. Redirecting to the official series page.");
+        window.location.href = homepage;
+      } else {
+        alert("No trailer or official page available for this series.");
+      }
+    }
+  };
   return (
     <div>
       <section
@@ -165,7 +186,14 @@ const SeriesDetails = () => {
                 <div className="flex flex-col items-center lg:items-start gap-3 sm:gap-4">
                   <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:gap-6 lg:gap-8">
                     {seriesdetails.seriescastDetails.cast?.length > 0 ? (
-                      seriesdetails.seriescastDetails.cast
+                      Array.from(
+                        new Map(
+                          seriesdetails.seriescastDetails.cast.map((artist) => [
+                            artist.id,
+                            artist,
+                          ])
+                        ).values()
+                      )
                         .slice(0, 3)
                         .map((artist) => (
                           <div
@@ -185,13 +213,20 @@ const SeriesDetails = () => {
                     )}
                   </div>
                   <span className="text-[0.9em] sm:text-[0.8em] md:text-[1em] text-blue-500">
-                    Carw :
+                    Crew :
                   </span>
                   <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:gap-6 lg:gap-8">
                     {seriesdetails.seriescastDetails.crew?.length > 0 ? (
-                      seriesdetails.seriescastDetails.crew
+                      Array.from(
+                        new Map(
+                          seriesdetails.seriescastDetails.crew.map((person) => [
+                            person.id,
+                            person,
+                          ])
+                        ).values()
+                      )
                         .slice(0, 3)
-                        .map((person) => (
+                        .map((person, index) => (
                           <div
                             key={person.id}
                             className="flex flex-col text-[0.75em] sm:text-[0.85em] items-center text-center"
@@ -231,18 +266,18 @@ const SeriesDetails = () => {
                     </span>
                   )}
                   <span className="text-white text-[0.5em] sm:text-[0.7em] md:text-[0.8em]">
-                    rate movie
+                    rate series
                   </span>
                 </div>
                 <div
-                  onClick={() => setshow(!show)}
+                  onClick={handlePlayTrailer}
                   className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform duration-300"
                 >
                   <span>
                     <FaCirclePlay className="text-red-500 text-[1.5em] sm:text-[1.5em]" />
                   </span>
                   <span className="text-white text-[0.5em] sm:text-[0.7em] md:text-[0.8em]">
-                    play a trail
+                    play a trailer
                   </span>
                 </div>
               </Typography>

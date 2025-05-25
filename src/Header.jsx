@@ -137,20 +137,17 @@ const Header = () => {
     setSelectedItemId(null);
     setError(null);
   };
-
   const handleSuggestionClick = (suggestion) => {
-    const title =
-      suggestion.title || suggestion.name || suggestion.original_name;
-    if (title && suggestion.id) {
-      setSearchQuery(title);
-      setSelectedItemId(suggestion.id);
-      setSuggestions([]);
-      setSuggestionsVisible(false);
-    } else {
+    const id = suggestion.id;
+    if (id) {
+      const path = searchType === "Movies" ? `/movie/${id}` : `/series/${id}`;
+      navigate(path);
       setSearchQuery("");
       setSelectedItemId(null);
       setSuggestions([]);
       setSuggestionsVisible(false);
+    } else {
+      setError("No valid ID found for this suggestion");
     }
   };
 
@@ -268,7 +265,7 @@ const Header = () => {
     if (window.innerWidth >= 960) {
       const rect = searchRef.current.getBoundingClientRect();
       const topPosition = rect.bottom + window.scrollY + 58;
-      const leftPosition = rect.left + 515;
+      const leftPosition = rect.left + 530;
 
       return createPortal(
         <div
