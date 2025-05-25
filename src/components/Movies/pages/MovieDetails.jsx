@@ -43,8 +43,6 @@ const MovieDetails = () => {
     return state.onemoviedetails;
   });
 
-  // console.log(movieCollection);
-
   useEffect(() => {
     dispatch(getMovieDetails(id));
     dispatch(getMovieCastDetails(id));
@@ -52,6 +50,19 @@ const MovieDetails = () => {
     dispatch(getMovieReviews(id));
   }, [id]);
 
+  useEffect(() => {
+    if (
+      onemovie.movieDetailsError ||
+      (!onemovie.movieDetailsLoading && !onemovie.movieDetails)
+    ) {
+      navigate("/not-found");
+    }
+  }, [
+    onemovie.movieDetailsError,
+    onemovie.movieDetails,
+    onemovie.movieDetailsLoading,
+    navigate,
+  ]);
   if (onemovie.movieDetailsLoading) {
     return <Loading />;
   }
@@ -66,7 +77,7 @@ const MovieDetails = () => {
   };
 
   return (
-    <div className="w-[100%]">
+    <div className="">
       <section
         className="relative bg-cover bg-center bg-no-repeat min-h-[70vh] sm:min-h-[60vh] md:min-h-[70vh]"
         style={{

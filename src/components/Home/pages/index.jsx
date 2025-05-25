@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { motion } from "framer-motion";
 import HomeMoviesCard from "./HomeMoviesCard";
 import HomeSeriesCard from "./HomeSeriesCard";
 import Loading from "../../apiRequestError-Loading/Loading";
@@ -41,6 +40,8 @@ const Home = () => {
     slidesToScroll: 1,
     arrows: true,
     centerMode: false,
+    autoplay: true,
+    autoplaySpeed: 2000,
     responsive: [
       { breakpoint: 1280, settings: { slidesToShow: 4, slidesToScroll: 1 } },
       { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 1 } },
@@ -94,7 +95,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-full mt-12 px-4">
+      <div className="w-full max-w-[90%] mt-12 px-[2em]">
         <h1 className="text-light-blue-800 text-4xl mb-2">Movies</h1>
         {movieStatus == "loading" ? (
           <Loading />
@@ -109,7 +110,7 @@ const Home = () => {
                     onClick={() => navigate(`/movie/${movie.id}`)}
                     src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     alt={movie.title}
-                    className="w-full h-auto aspect-[2/3] object-cover hover:cursor-pointer rounded-lg transition-transform duration-300 hover:scale-105"
+                    className="w-[90%] h-auto aspect-[2/3] object-cover hover:cursor-pointer rounded-lg transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               </div>
@@ -118,7 +119,7 @@ const Home = () => {
         )}
       </div>
 
-      <div className="w-full max-w-full mt-12 px-4">
+      <div className="w-full max-w-[90%] mt-12 px-[2em]">
         <h1 className="text-light-blue-800 text-4xl mb-2">Series</h1>
         {tvStatus == "loading" ? (
           <Loading />
@@ -133,7 +134,7 @@ const Home = () => {
                     onClick={() => navigate(`/series/${tvShow.id}`)}
                     src={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                     alt={tvShow.name}
-                    className="w-full h-auto aspect-[2/3] object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                    className="w-[90%] cursor-pointer h-auto aspect-[2/3] object-cover rounded-lg transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               </div>
