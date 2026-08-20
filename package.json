@@ -16,7 +16,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
+    "verify": "npm run lock:check && npm run typecheck && npm run lint && npm run test && npm run build",
+    "lock:fix": "tsx scripts/fix-lockfile.ts",
+    "lock:check": "tsx scripts/fix-lockfile.ts --check"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -35,7 +35,25 @@ build still succeeds, but the prerendered pages ship without TMDB data.
 | `npm run lint` | ESLint |
 | `npm test` | Vitest |
 | `npm run test:coverage` | Vitest with coverage |
-| `npm run verify` | typecheck + lint + test + build |
+| `npm run verify` | lockfile check + typecheck + lint + test + build |
+| `npm run lock:check` | fail if `package-lock.json` is missing a platform binary |
+| `npm run lock:fix` | regenerate `package-lock.json` with every platform binary |
+
+### package-lock.json and cross-platform builds
+
+npm resolves optional platform binaries (`@rollup/rollup-*`, `@esbuild/*`)
+against the machine that generated the lockfile. Running `npm install` on
+Windows therefore produces a lockfile with only the Windows binaries, and a
+Linux CI build then fails with:
+
+```
+Cannot find module @rollup/rollup-linux-x64-gnu
+```
+
+`npm run lock:fix` avoids this by resolving the lockfile in a clean temporary
+directory, which makes npm record all platforms. `npm run lock:check` (part of
+`npm run verify`) fails the build if the entries go missing again, so run
+`lock:fix` and commit the result after any dependency change.
 
 ## Structure
 
