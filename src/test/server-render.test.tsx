@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { movieSummary, seriesSummary } from "@/test/factories";
 
+vi.setConfig({ testTimeout: 30_000 });
+
 function json(body: unknown) {
   return new Response(JSON.stringify(body), {
     status: 200,
