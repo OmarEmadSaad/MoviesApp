@@ -35,7 +35,8 @@ build still succeeds, but the prerendered pages ship without TMDB data.
 | `npm run lint` | ESLint |
 | `npm test` | Vitest |
 | `npm run test:coverage` | Vitest with coverage |
-| `npm run verify` | lockfile check + typecheck + lint + test + build |
+| `npm run verify` | lockfile check + typecheck + lint + test + build + production verification |
+| `npm run verify:production` | serve the build in a real browser and assert data, hydration, head tags and assets |
 | `npm run lock:check` | fail if `package-lock.json` is missing a platform binary |
 | `npm run lock:fix` | regenerate `package-lock.json` with every platform binary |
 
@@ -86,5 +87,19 @@ time with their TMDB data already fetched, so they ship as complete HTML with
 metadata, headings, internal links and JSON-LD. The client hydrates them. All
 other routes render client-side from the SPA shell.
 
-`vercel.json` sets `cleanUrls` so `dist/movies.html` is served at `/movies`, with
-a rewrite to `index.html` for everything else.
+`vercel.json` sets `cleanUrls` so `dist/movies.html` is served at `/movies`.
+Everything else rewrites to `dist/app.html`, a clean shell with an empty root -
+never a prerendered page. Serving one route's prerendered HTML for a different
+URL is what caused React hydration errors #418/#423 in production.
+
+Each prerendered document carries `data-prerendered-path` on its root element.
+`main.tsx` hydrates only when that value matches the current path, and falls
+back to a clean client render otherwise, so a hosting misconfiguration degrades
+instead of breaking.
+
+### Build-time configuration validation
+
+`npm run build` fails if `VITE_TMDB_TOKEN` is missing, and fails if a
+prerendered page does not contain the expected number of real TMDB entity
+links. A build can no longer report success while shipping empty pages. Set
+`ALLOW_UNCONFIGURED_BUILD=1` to build deliberately without a token.

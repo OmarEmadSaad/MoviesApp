@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { PageLoading } from "@/components/ui/states";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ConfigNotice } from "@/components/ConfigNotice";
+import { Toaster } from "@/components/Toaster";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { routes } from "@/routes";
 
@@ -24,6 +25,7 @@ export default function App() {
         </ErrorBoundary>
       </main>
       <Footer />
+      <Toaster />
     </div>
   );
 }

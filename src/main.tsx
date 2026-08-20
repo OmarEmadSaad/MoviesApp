@@ -1,32 +1,22 @@
-import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { HelmetProvider } from "react-helmet-async";
-import App from "./App";
-import { Toaster } from "./components/Toaster";
+import { ClientTree } from "./app-tree";
 import { store } from "./store";
+import { PRERENDER_PATH_ATTR, normalizePath } from "./lib/seo/document";
 import "./index.css";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container #root not found");
 
-const tree = (
-  <StrictMode>
-    <HelmetProvider>
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-          <Toaster />
-        </Provider>
-      </BrowserRouter>
-    </HelmetProvider>
-  </StrictMode>
-);
+const tree = <ClientTree store={store} />;
 
+const prerenderedPath = container.getAttribute(PRERENDER_PATH_ATTR);
+const matchesCurrentRoute =
+  prerenderedPath !== null &&
+  normalizePath(prerenderedPath) === normalizePath(window.location.pathname);
 
-if (container.hasChildNodes()) {
+if (matchesCurrentRoute && container.hasChildNodes()) {
   hydrateRoot(container, tree);
 } else {
+  container.innerHTML = "";
   createRoot(container).render(tree);
 }

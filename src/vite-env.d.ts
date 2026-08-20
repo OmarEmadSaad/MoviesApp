@@ -9,10 +9,4 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-declare global {
-  interface Window {
-    __PRELOADED_STATE__?: Record<string, unknown>;
-  }
-}
-
 export {};

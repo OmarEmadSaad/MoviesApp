@@ -1,9 +1,7 @@
 import { PassThrough } from "node:stream";
 import { renderToPipeableStream } from "react-dom/server";
-import { StaticRouter } from "react-router";
-import { Provider } from "react-redux";
-import { HelmetProvider, type HelmetServerState } from "react-helmet-async";
-import App from "./App";
+import type { HelmetServerState } from "react-helmet-async";
+import { ServerTree } from "./app-tree";
 import { createStore, type AppStore, type RootState } from "./store";
 import { tmdbApi } from "./lib/tmdb/api";
 
@@ -43,13 +41,7 @@ export async function render(url: string): Promise<RenderResult> {
   const helmetContext: { helmet?: HelmetServerState } = {};
 
   const html = await renderFully(
-    <HelmetProvider context={helmetContext}>
-      <StaticRouter location={url}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </StaticRouter>
-    </HelmetProvider>,
+    <ServerTree store={store} url={url} helmetContext={helmetContext} />,
   );
 
   const helmet = helmetContext.helmet;
