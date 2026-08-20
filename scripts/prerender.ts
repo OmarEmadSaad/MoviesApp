@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -33,6 +34,62 @@ const DATA_EXPECTATIONS: Record<string, { pattern: RegExp; min: number }[]> = {
   "/series": [{ pattern: /href="\/series\/\d+\/[a-z0-9-]+"/g, min: 10 }],
 };
 
+function describeEnvironment(): string[] {
+  const viteKeysInProcess = Object.keys(process.env).filter((key) =>
+    key.startsWith("VITE_"),
+  );
+  const viteKeysLoaded = Object.keys(env);
+  const onVercel = Boolean(process.env.VERCEL);
+
+  const lines = [
+    "  What this build can actually see:",
+    `    VITE_* in process env : ${
+      viteKeysInProcess.length ? viteKeysInProcess.join(", ") : "(none)"
+    }`,
+    `    VITE_* after loadEnv  : ${
+      viteKeysLoaded.length ? viteKeysLoaded.join(", ") : "(none)"
+    }`,
+    `    .env file present     : ${existsSync(resolve(root, ".env")) ? "yes" : "no"}`,
+  ];
+
+  if (onVercel) {
+    lines.push(
+      `    Vercel environment    : ${process.env.VERCEL_ENV ?? "unknown"}`,
+      `    Vercel git branch     : ${process.env.VERCEL_GIT_COMMIT_REF ?? "unknown"}`,
+    );
+  }
+
+  return lines;
+}
+
+function configurationHelp(): string[] {
+  const onVercel = Boolean(process.env.VERCEL);
+  const vercelEnv = process.env.VERCEL_ENV ?? "production";
+
+  if (!onVercel) {
+    return [
+      "  Fix locally:",
+      "    1. cp .env.example .env",
+      "    2. put your TMDB v4 read access token in VITE_TMDB_TOKEN",
+      "       (https://www.themoviedb.org/settings/api -> API Read Access Token)",
+      "    3. re-run the build",
+    ];
+  }
+
+  return [
+    "  Fix on Vercel:",
+    "    1. Vercel dashboard -> your project -> Settings -> Environment Variables",
+    "    2. Add VITE_TMDB_TOKEN = <your TMDB v4 read access token>",
+    "    3. Add VITE_SITE_URL   = https://<your-domain>",
+    `    4. Tick every environment, including "${vercelEnv}" - this build is a`,
+    `       "${vercelEnv}" deployment, so a variable scoped only to another`,
+    "       environment will not be visible here",
+    "    5. Save, then Deployments -> ... -> Redeploy",
+    "       (VITE_* values are read at build time, so an existing deployment",
+    "        will not pick them up without a rebuild)",
+  ];
+}
+
 function assertConfigured(): void {
   if (env.VITE_TMDB_TOKEN) return;
 
@@ -40,15 +97,15 @@ function assertConfigured(): void {
     "",
     "  Missing required build configuration: VITE_TMDB_TOKEN",
     "",
-    "  Without it the prerendered pages contain no TMDB data and the deployed",
-    "  site shows a configuration notice on every route.",
+    "  Without it every page of the deployed site shows a configuration notice",
+    "  and no TMDB data, so this build is being stopped rather than shipped.",
     "",
-    "  Local:  copy .env.example to .env and add a TMDB v4 read access token.",
-    "  Vercel: Project Settings -> Environment Variables -> add VITE_TMDB_TOKEN",
-    "          (and VITE_SITE_URL) for Production, Preview and Development,",
-    "          then redeploy. VITE_* values are baked in at build time.",
+    ...describeEnvironment(),
     "",
-    "  To build deliberately without it, set ALLOW_UNCONFIGURED_BUILD=1.",
+    ...configurationHelp(),
+    "",
+    "  To ship deliberately without a token (the site will show the notice),",
+    "  set ALLOW_UNCONFIGURED_BUILD=1 for this build.",
     "",
   ].join("\n");
 
