@@ -1,5 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { TMDB_BASE_URL, getTmdbToken } from "./config";
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query";
+import {
+  TMDB_BASE_URL,
+  TMDB_NOT_CONFIGURED,
+  getTmdbToken,
+  isTmdbConfigured,
+} from "./config";
 import type {
   Collection,
   CombinedCredits,
@@ -18,16 +28,36 @@ import type {
   Video,
 } from "@/types/tmdb";
 
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: TMDB_BASE_URL,
+  prepareHeaders: (headers) => {
+    const token = getTmdbToken();
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    headers.set("accept", "application/json");
+    return headers;
+  },
+});
+
+const baseQuery: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  if (!isTmdbConfigured()) {
+    return {
+      error: {
+        status: "CUSTOM_ERROR",
+        error: TMDB_NOT_CONFIGURED,
+        data: TMDB_NOT_CONFIGURED,
+      },
+    };
+  }
+  return rawBaseQuery(args, api, extraOptions);
+};
+
 export const tmdbApi = createApi({
   reducerPath: "tmdb",
-  baseQuery: fetchBaseQuery({
-    baseUrl: TMDB_BASE_URL,
-    prepareHeaders: (headers) => {
-      headers.set("Authorization", `Bearer ${getTmdbToken()}`);
-      headers.set("accept", "application/json");
-      return headers;
-    },
-  }),
+  baseQuery,
 
   keepUnusedDataFor: 300,
   refetchOnMountOrArgChange: 300,

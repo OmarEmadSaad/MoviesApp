@@ -25,7 +25,7 @@ export function Footer() {
         </nav>
 
         <p className="text-xs text-gray-400 sm:text-sm">
-          &copy; {YEAR}{" "}
+          <span suppressHydrationWarning>&copy; {YEAR}</span>{" "}
           <span className="text-base text-blue-500">React Movies</span>. All
           rights reserved.
         </p>
