@@ -136,7 +136,35 @@ function assertSiteUrl(): void {
   );
 }
 
-function assertRealData(route: string, html: string): void {
+interface RejectedQuery {
+  status?: string;
+  error?: { status?: unknown; error?: unknown; data?: unknown };
+}
+
+function describeQueryErrors(preloadedState: unknown): string[] {
+  const state = preloadedState as
+    | { tmdb?: { queries?: Record<string, RejectedQuery | undefined> } }
+    | undefined;
+  const queries = state?.tmdb?.queries ?? {};
+
+  const seen = new Set<string>();
+  for (const entry of Object.values(queries)) {
+    if (entry?.status !== "rejected" || !entry.error) continue;
+    const status = entry.error.status;
+    const detail =
+      typeof entry.error.data === "string"
+        ? entry.error.data
+        : JSON.stringify(entry.error.data ?? entry.error.error ?? "");
+    seen.add(`${String(status)} ${detail}`.trim().slice(0, 200));
+  }
+  return [...seen];
+}
+
+function assertRealData(
+  route: string,
+  html: string,
+  preloadedState: unknown,
+): void {
   if (!env.VITE_TMDB_TOKEN) return;
 
   const expectations = DATA_EXPECTATIONS[route];
@@ -145,8 +173,21 @@ function assertRealData(route: string, html: string): void {
   for (const { pattern, min } of expectations) {
     const found = new Set(html.match(pattern) ?? []).size;
     if (found < min) {
+      const errors = describeQueryErrors(preloadedState);
+      const diagnosis = errors.length
+        ? [
+            "",
+            "  TMDB rejected the request during prerender:",
+            ...errors.map((error) => `    ${error}`),
+            "",
+            "  401 means the token is wrong or expired. Use the v4 API Read",
+            "  Access Token (a long JWT starting eyJ), not the short v3 API key.",
+            "  429 means rate limited - redeploy in a minute.",
+          ].join("\n")
+        : "  The TMDB request during prerender returned no results.";
+
       throw new Error(
-        `${route} contains only ${found} entity links in its server HTML (expected at least ${min}). The TMDB request during prerender probably failed.`,
+        `${route} contains only ${found} entity links in its server HTML (expected at least ${min}).\n${diagnosis}`,
       );
     }
   }
@@ -194,7 +235,7 @@ async function main(): Promise<void> {
     });
 
     assertHead(route, page);
-    assertRealData(route, page);
+    assertRealData(route, page, preloadedState);
 
     const outPath =
       route === "/"
