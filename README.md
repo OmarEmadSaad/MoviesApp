@@ -10,6 +10,20 @@ cp .env.example .env   # add a TMDB v4 read access token
 npm run dev
 ```
 
+### Deploying to Vercel
+
+Set these under **Project Settings -> Environment Variables** (Production,
+Preview and Development):
+
+| Variable | Value |
+| --- | --- |
+| `VITE_TMDB_TOKEN` | your TMDB v4 read access token |
+| `VITE_SITE_URL` | the deployed origin, e.g. `https://your-app.vercel.app` |
+
+`VITE_SITE_URL` drives canonical URLs, Open Graph tags and `sitemap.xml`, so
+set it before the first production build. If `VITE_TMDB_TOKEN` is missing the
+build still succeeds, but the prerendered pages ship without TMDB data.
+
 ## Scripts
 
 | Script | Does |
@@ -21,7 +35,25 @@ npm run dev
 | `npm run lint` | ESLint |
 | `npm test` | Vitest |
 | `npm run test:coverage` | Vitest with coverage |
-| `npm run verify` | typecheck + lint + test + build |
+| `npm run verify` | lockfile check + typecheck + lint + test + build |
+| `npm run lock:check` | fail if `package-lock.json` is missing a platform binary |
+| `npm run lock:fix` | regenerate `package-lock.json` with every platform binary |
+
+### package-lock.json and cross-platform builds
+
+npm resolves optional platform binaries (`@rollup/rollup-*`, `@esbuild/*`)
+against the machine that generated the lockfile. Running `npm install` on
+Windows therefore produces a lockfile with only the Windows binaries, and a
+Linux CI build then fails with:
+
+```
+Cannot find module @rollup/rollup-linux-x64-gnu
+```
+
+`npm run lock:fix` avoids this by resolving the lockfile in a clean temporary
+directory, which makes npm record all platforms. `npm run lock:check` (part of
+`npm run verify`) fails the build if the entries go missing again, so run
+`lock:fix` and commit the result after any dependency change.
 
 ## Structure
 
@@ -40,8 +72,12 @@ src/
     layout/    Header, Footer, SearchBox
   features/    one folder per route group
   routes.tsx   route table (every page lazy-loaded)
-scripts/       prerender + sitemap/robots generation
+scripts/       prerender + sitemap/robots generation (TypeScript, run via tsx)
 ```
+
+Every file in the project is TypeScript, including the Vite, Tailwind and
+ESLint configs and the build scripts. PostCSS is configured inline in
+`vite.config.ts` rather than in a separate config file.
 
 ## Rendering
 

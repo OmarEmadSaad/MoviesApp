@@ -2,31 +2,41 @@ import { writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadEnv } from "vite";
+import { slugify } from "../src/lib/slug";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = resolve(root, "dist");
 const env = loadEnv("production", root, "VITE_");
 
-const SITE_URL = (env.VITE_SITE_URL || "http://localhost:5173").replace(/\/$/, "");
+const SITE_URL = (env.VITE_SITE_URL || "http://localhost:5173").replace(
+  /\/$/,
+  "",
+);
 const TOKEN = env.VITE_TMDB_TOKEN;
 
 const CATALOGUE_PAGES = 20;
-
 const DETAIL_PAGES = 5;
 
-function slugify(value) {
-  if (!value) return "";
-  return value
-    .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/['’]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
+interface UrlOptions {
+  changefreq?: string;
+  priority?: number;
 }
 
-async function tmdb(path) {
+interface TmdbListItem {
+  id: number;
+  title?: string;
+  name?: string;
+}
+
+interface TmdbList {
+  results: TmdbListItem[];
+}
+
+interface TmdbCredits {
+  cast: { id: number; name: string }[];
+}
+
+async function tmdb<T>(path: string): Promise<T | null> {
   if (!TOKEN) return null;
   const response = await fetch(`https://api.themoviedb.org/3${path}`, {
     headers: { Authorization: `Bearer ${TOKEN}`, accept: "application/json" },
@@ -35,10 +45,11 @@ async function tmdb(path) {
     console.warn(`  TMDB ${path} responded ${response.status}`);
     return null;
   }
-  return response.json();
+  return (await response.json()) as T;
 }
 
-function urlEntry(path, { changefreq = "weekly", priority = 0.6 } = {}) {
+function urlEntry(path: string, options: UrlOptions = {}): string {
+  const { changefreq = "weekly", priority = 0.6 } = options;
   return `  <url>
     <loc>${SITE_URL}${escapeXml(path)}</loc>
     <changefreq>${changefreq}</changefreq>
@@ -46,7 +57,7 @@ function urlEntry(path, { changefreq = "weekly", priority = 0.6 } = {}) {
   </url>`;
 }
 
-function escapeXml(value) {
+function escapeXml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -55,9 +66,9 @@ function escapeXml(value) {
     .replace(/'/g, "&apos;");
 }
 
-async function main() {
-  const paths = new Map();
-  const add = (path, options) => {
+async function main(): Promise<void> {
+  const paths = new Map<string, string>();
+  const add = (path: string, options?: UrlOptions) => {
     if (!paths.has(path)) paths.set(path, urlEntry(path, options));
   };
 
@@ -71,10 +82,8 @@ async function main() {
     add(`/series?page=${page}`, { priority: 0.5 });
   }
 
-  const people = new Map();
-
   for (let page = 1; page <= DETAIL_PAGES; page += 1) {
-    const movies = await tmdb(
+    const movies = await tmdb<TmdbList>(
       `/discover/movie?include_adult=false&language=en-US&sort_by=popularity.desc&page=${page}`,
     );
     for (const movie of movies?.results ?? []) {
@@ -84,7 +93,7 @@ async function main() {
       });
     }
 
-    const series = await tmdb(`/tv/popular?language=en-US&page=${page}`);
+    const series = await tmdb<TmdbList>(`/tv/popular?language=en-US&page=${page}`);
     for (const show of series?.results ?? []) {
       const slug = slugify(show.name);
       add(slug ? `/series/${show.id}/${slug}` : `/series/${show.id}`, {
@@ -93,15 +102,16 @@ async function main() {
     }
   }
 
-  const topMovies = await tmdb(
+  const people = new Map<number, string>();
+  const topMovies = await tmdb<TmdbList>(
     "/discover/movie?include_adult=false&language=en-US&sort_by=popularity.desc&page=1",
   );
   for (const movie of (topMovies?.results ?? []).slice(0, 20)) {
-    const credits = await tmdb(`/movie/${movie.id}/credits?language=en-US`);
+    const credits = await tmdb<TmdbCredits>(
+      `/movie/${movie.id}/credits?language=en-US`,
+    );
     for (const actor of (credits?.cast ?? []).slice(0, 8)) {
-      if (!people.has(actor.id)) {
-        people.set(actor.id, actor.name);
-      }
+      if (!people.has(actor.id)) people.set(actor.id, actor.name);
     }
   }
   for (const [id, name] of people) {
@@ -119,9 +129,6 @@ ${[...paths.values()].join("\n")}
 User-agent: *
 Allow: /
 
-# Internal search results are thin, near-duplicate pages. Crawlers should still
-# follow the links on them, which the pages themselves declare via
-# "noindex, follow".
 Disallow: /search/
 
 Sitemap: ${SITE_URL}/sitemap.xml
@@ -131,11 +138,11 @@ Sitemap: ${SITE_URL}/sitemap.xml
   await writeFile(resolve(distDir, "robots.txt"), robots, "utf-8");
 
   console.log(
-    `Wrote sitemap.xml (${paths.size} URLs) and robots.txt${TOKEN ? "" : " — no TMDB token, static routes only"}.`,
+    `Wrote sitemap.xml (${paths.size} URLs) and robots.txt${TOKEN ? "" : " - no TMDB token, static routes only"}.`,
   );
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
   console.error(error);
   process.exit(1);
 });

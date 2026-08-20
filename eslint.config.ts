@@ -37,22 +37,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*.{js,mjs,cjs}"],
-    extends: [js.configs.recommended],
-    languageOptions: {
-      globals: { ...globals.node },
-      sourceType: "module",
-    },
-  },
-  {
-    files: ["**/*.cjs"],
-    languageOptions: { sourceType: "commonjs" },
-  },
-  {
-
-
     files: ["**/*.d.ts"],
     rules: { "@typescript-eslint/no-unused-vars": "off" },
+  },
+  {
+    files: ["scripts/**/*.ts", "*.config.ts"],
+    rules: { "no-console": "off" },
   },
   {
     files: ["src/**/*.test.{ts,tsx}", "src/test/**/*.{ts,tsx}"],

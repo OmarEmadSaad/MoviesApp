@@ -1,8 +1,13 @@
-
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { loadEnv } from "vite";
+import type { RenderResult } from "../src/entry-server";
+
+interface ServerEntry {
+  render: (url: string) => Promise<RenderResult>;
+  STATIC_ROUTES: string[];
+}
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = resolve(root, "dist");
@@ -10,11 +15,11 @@ const ssrEntry = resolve(root, "dist-ssr/entry-server.js");
 
 const env = loadEnv("production", root, "VITE_");
 
-async function main() {
+const PLACEHOLDER_HEAD = "<!--app-head-->";
+const PLACEHOLDER_HTML = "<!--app-html-->";
+
+async function main(): Promise<void> {
   const template = await readFile(resolve(distDir, "index.html"), "utf-8");
-
-
-
 
   if (!template.includes(PLACEHOLDER_HTML)) {
     throw new Error(
@@ -22,7 +27,9 @@ async function main() {
     );
   }
 
-  const { render, STATIC_ROUTES } = await import(`file://${ssrEntry}`);
+  const { render, STATIC_ROUTES } = (await import(
+    pathToFileURL(ssrEntry).href
+  )) as ServerEntry;
 
   let succeeded = 0;
 
@@ -35,8 +42,7 @@ async function main() {
         .replace(PLACEHOLDER_HTML, html)
         .replace(
           "</body>",
-          `  <script>window.__PRELOADED_STATE__=${serialize(preloadedState)}</script>
-  </body>`,
+          `  <script>window.__PRELOADED_STATE__=${serialize(preloadedState)}</script>\n  </body>`,
         );
 
       const outPath =
@@ -49,10 +55,8 @@ async function main() {
       succeeded += 1;
       console.log(`  prerendered ${route}`);
     } catch (error) {
-
-
       console.warn(
-        `  could not prerender ${route}: ${error.message}. Falling back to the SPA shell.`,
+        `  could not prerender ${route}: ${(error as Error).message}. Falling back to the SPA shell.`,
       );
     }
   }
@@ -65,11 +69,7 @@ async function main() {
   }
 }
 
-const PLACEHOLDER_HEAD = "<!--app-head-->";
-const PLACEHOLDER_HTML = "<!--app-html-->";
-
-
-function stripDefaultHead(template, head) {
+function stripDefaultHead(template: string, head: string): string {
   let result = template;
   if (head.includes("<title")) {
     result = result.replace(/[ \t]*<title>[\s\S]*?<\/title>\r?\n/, "");
@@ -83,12 +83,11 @@ function stripDefaultHead(template, head) {
   return result;
 }
 
-
-function serialize(state) {
+function serialize(state: unknown): string {
   return JSON.stringify(state).replace(/</g, "\\u003c");
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
   console.error(error);
   process.exit(1);
 });
