@@ -4,6 +4,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageLoading } from "@/components/ui/states";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ConfigNotice } from "@/components/ConfigNotice";
+import { Toaster } from "@/components/Toaster";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { routes } from "@/routes";
 
@@ -13,6 +15,7 @@ export default function App() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-black">
+      <ConfigNotice />
       <Header />
       <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         <ErrorBoundary>
@@ -22,6 +25,7 @@ export default function App() {
         </ErrorBoundary>
       </main>
       <Footer />
+      <Toaster />
     </div>
   );
 }

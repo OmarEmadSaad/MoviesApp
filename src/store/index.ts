@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { tmdbApi } from "@/lib/tmdb/api";
+import { readPreloadedState } from "@/lib/seo/document";
 
 const rootReducer = combineReducers({
   [tmdbApi.reducerPath]: tmdbApi.reducer,
@@ -21,9 +22,7 @@ export function createStore(preloadedState?: Partial<RootState>) {
 }
 
 export const store = createStore(
-  typeof window !== "undefined"
-    ? (window.__PRELOADED_STATE__ as Partial<RootState> | undefined)
-    : undefined,
+  readPreloadedState() as Partial<RootState> | undefined,
 );
 
 export type AppStore = ReturnType<typeof createStore>;

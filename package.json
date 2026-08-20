@@ -16,9 +16,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "verify": "npm run lock:check && npm run typecheck && npm run lint && npm run test && npm run build",
+    "verify": "npm run lock:check && npm run typecheck && npm run lint && npm run test && npm run build && npm run verify:production",
     "lock:fix": "tsx scripts/fix-lockfile.ts",
-    "lock:check": "tsx scripts/fix-lockfile.ts --check"
+    "lock:check": "tsx scripts/fix-lockfile.ts --check",
+    "verify:production": "tsx scripts/verify-production.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -39,6 +40,7 @@
     "globals": "^15.15.0",
     "jiti": "^2.7.0",
     "jsdom": "^26.0.0",
+    "playwright-core": "^1.62.1",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.23.12",

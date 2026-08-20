@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import { Seo } from "@/lib/seo/Seo";
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { Container } from "@/components/ui/Container";
 
 const SERVICE_ID = "service_g9r5iz5";
@@ -40,6 +41,10 @@ export default function ContactPage() {
         title="Contact us"
         description="Get in touch with the developer of React Movies with questions, bug reports or feedback about the site."
         canonicalPath="/contact-us"
+        jsonLd={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Contact us", path: "/contact-us" },
+        ])}
       />
 
       <Container width="narrow" className="py-12">
