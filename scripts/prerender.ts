@@ -35,27 +35,30 @@ const DATA_EXPECTATIONS: Record<string, { pattern: RegExp; min: number }[]> = {
 };
 
 function describeEnvironment(): string[] {
-  const viteKeysInProcess = Object.keys(process.env).filter((key) =>
-    key.startsWith("VITE_"),
+  const allViteKeys = Object.keys(env);
+  const systemKeys = allViteKeys.filter((key) =>
+    key.startsWith("VITE_VERCEL_"),
   );
-  const viteKeysLoaded = Object.keys(env);
+  const ownKeys = allViteKeys.filter((key) => !key.startsWith("VITE_VERCEL_"));
   const onVercel = Boolean(process.env.VERCEL);
 
   const lines = [
     "  What this build can actually see:",
-    `    VITE_* in process env : ${
-      viteKeysInProcess.length ? viteKeysInProcess.join(", ") : "(none)"
+    `    Your own VITE_* vars     : ${
+      ownKeys.length ? ownKeys.join(", ") : "(none - this is the problem)"
     }`,
-    `    VITE_* after loadEnv  : ${
-      viteKeysLoaded.length ? viteKeysLoaded.join(", ") : "(none)"
+    `    Vercel system VITE_* vars: ${systemKeys.length} auto-exposed (not yours)`,
+    `    .env file present        : ${
+      existsSync(resolve(root, ".env")) ? "yes" : "no"
     }`,
-    `    .env file present     : ${existsSync(resolve(root, ".env")) ? "yes" : "no"}`,
   ];
 
   if (onVercel) {
     lines.push(
-      `    Vercel environment    : ${process.env.VERCEL_ENV ?? "unknown"}`,
-      `    Vercel git branch     : ${process.env.VERCEL_GIT_COMMIT_REF ?? "unknown"}`,
+      `    Vercel environment       : ${process.env.VERCEL_ENV ?? "unknown"}`,
+      `    Vercel git branch        : ${
+        process.env.VERCEL_GIT_COMMIT_REF ?? "unknown"
+      }`,
     );
   }
 
@@ -80,13 +83,16 @@ function configurationHelp(): string[] {
     "  Fix on Vercel:",
     "    1. Vercel dashboard -> your project -> Settings -> Environment Variables",
     "    2. Add VITE_TMDB_TOKEN = <your TMDB v4 read access token>",
-    "    3. Add VITE_SITE_URL   = https://<your-domain>",
-    `    4. Tick every environment, including "${vercelEnv}" - this build is a`,
+    `    3. Tick every environment, including "${vercelEnv}" - this build is a`,
     `       "${vercelEnv}" deployment, so a variable scoped only to another`,
     "       environment will not be visible here",
-    "    5. Save, then Deployments -> ... -> Redeploy",
+    "    4. Save, then Deployments -> ... -> Redeploy",
     "       (VITE_* values are read at build time, so an existing deployment",
     "        will not pick them up without a rebuild)",
+    "",
+    "    VITE_SITE_URL is optional on Vercel: canonical and Open Graph URLs",
+    "    fall back to VERCEL_PROJECT_PRODUCTION_URL. Set it only to pin a",
+    "    custom domain.",
   ];
 }
 
@@ -118,8 +124,15 @@ function assertConfigured(): void {
 
 function assertSiteUrl(): void {
   if (env.VITE_SITE_URL?.trim()) return;
+
+  const fallback = env.VITE_VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (fallback) {
+    console.log(`  site URL derived from Vercel: https://${fallback}`);
+    return;
+  }
+
   console.warn(
-    "\n  WARNING: VITE_SITE_URL is not set. Canonical and Open Graph URLs will\n  point at http://localhost:5173. Set it before a production deploy.\n",
+    "\n  WARNING: neither VITE_SITE_URL nor VERCEL_PROJECT_PRODUCTION_URL is set.\n  Canonical and Open Graph URLs will point at http://localhost:5173.\n",
   );
 }
 

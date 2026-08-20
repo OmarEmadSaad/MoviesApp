@@ -1,3 +1,5 @@
+import { resolveSiteUrl } from "@/lib/seo/site-url";
+
 export const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 export const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -12,7 +14,8 @@ export function isTmdbConfigured(): boolean {
 }
 
 export function getSiteUrl(): string {
-  return (
-    import.meta.env.VITE_SITE_URL?.trim() || "http://localhost:5173"
-  ).replace(/\/$/, "");
+  return resolveSiteUrl(
+    import.meta.env.VITE_SITE_URL,
+    import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL,
+  );
 }
