@@ -3,14 +3,15 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadEnv } from "vite";
 import { slugify } from "../src/lib/slug";
+import { resolveSiteUrl } from "../src/lib/seo/site-url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = resolve(root, "dist");
 const env = loadEnv("production", root, "VITE_");
 
-const SITE_URL = (env.VITE_SITE_URL || "http://localhost:5173").replace(
-  /\/$/,
-  "",
+const SITE_URL = resolveSiteUrl(
+  env.VITE_SITE_URL,
+  env.VITE_VERCEL_PROJECT_PRODUCTION_URL,
 );
 const TOKEN = env.VITE_TMDB_TOKEN;
 

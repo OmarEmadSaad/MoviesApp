@@ -15,10 +15,10 @@ npm run dev
 Set these under **Project Settings -> Environment Variables** (Production,
 Preview and Development):
 
-| Variable | Value |
-| --- | --- |
-| `VITE_TMDB_TOKEN` | your TMDB v4 read access token |
-| `VITE_SITE_URL` | the deployed origin, e.g. `https://your-app.vercel.app` |
+| Variable | Required | Value |
+| --- | --- | --- |
+| `VITE_TMDB_TOKEN` | yes | your TMDB v4 read access token |
+| `VITE_SITE_URL` | no | only to pin a custom domain; otherwise derived from Vercel's `VERCEL_PROJECT_PRODUCTION_URL` |
 
 `VITE_SITE_URL` drives canonical URLs, Open Graph tags and `sitemap.xml`, so
 set it before the first production build. If `VITE_TMDB_TOKEN` is missing the
