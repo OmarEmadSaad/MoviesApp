@@ -10,6 +10,20 @@ cp .env.example .env   # add a TMDB v4 read access token
 npm run dev
 ```
 
+### Deploying to Vercel
+
+Set these under **Project Settings -> Environment Variables** (Production,
+Preview and Development):
+
+| Variable | Value |
+| --- | --- |
+| `VITE_TMDB_TOKEN` | your TMDB v4 read access token |
+| `VITE_SITE_URL` | the deployed origin, e.g. `https://your-app.vercel.app` |
+
+`VITE_SITE_URL` drives canonical URLs, Open Graph tags and `sitemap.xml`, so
+set it before the first production build. If `VITE_TMDB_TOKEN` is missing the
+build still succeeds, but the prerendered pages ship without TMDB data.
+
 ## Scripts
 
 | Script | Does |
@@ -40,8 +54,12 @@ src/
     layout/    Header, Footer, SearchBox
   features/    one folder per route group
   routes.tsx   route table (every page lazy-loaded)
-scripts/       prerender + sitemap/robots generation
+scripts/       prerender + sitemap/robots generation (TypeScript, run via tsx)
 ```
+
+Every file in the project is TypeScript, including the Vite, Tailwind and
+ESLint configs and the build scripts. PostCSS is configured inline in
+`vite.config.ts` rather than in a separate config file.
 
 ## Rendering
 

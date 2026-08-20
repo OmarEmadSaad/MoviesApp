@@ -2,6 +2,8 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
 
 export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react()],
@@ -10,17 +12,15 @@ export default defineConfig(({ isSsrBuild }) => ({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  css: {
+    postcss: {
+      plugins: [tailwindcss(), autoprefixer()],
+    },
+  },
   ssr: {
-
-
-
     noExternal: ["react-helmet-async"],
   },
   build: {
-
-
-
-
     rollupOptions: isSsrBuild
       ? {}
       : {
